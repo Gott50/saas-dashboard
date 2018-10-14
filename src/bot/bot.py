@@ -105,11 +105,22 @@ class Bot:
     def act(self, url):
         driver = self.browser
         driver.get(url)
-        self.login()
+        self.login(driver)
+        self.start_test(driver)
 
+    def start_test(self, driver):
+        wait = WebDriverWait(driver, 10)
+        iframe1 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#course-player-container iframe')))
+        driver.switch_to.frame(iframe1)
+        iframe2 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#contentFrame')))
+        driver.switch_to.frame(iframe2)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
+        print(element)
+        (ActionChains(driver)
+         .move_to_element(element)
+         .click().perform())
 
-    def login(self):
-        driver = self.browser
+    def login(self, driver):
         wait = WebDriverWait(driver, 10)
         element = wait.until(EC.element_to_be_clickable((By.ID, 'i0116')))
         (ActionChains(driver)
@@ -121,11 +132,6 @@ class Bot:
          .move_to_element(element)
          .click().send_keys(self.password).perform())
         driver.find_element_by_id("idSIButton9").click()
-        sleep(1)
-        try:
-            driver.find_element_by_id("idSIButton9").click()
-        except NoSuchElementException:
-            print("Yes not Found")
 
     def end(self):
         """Closes the current session"""
