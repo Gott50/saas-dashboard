@@ -114,11 +114,24 @@ class Bot:
         driver.switch_to.frame(iframe1)
         iframe2 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#contentFrame')))
         driver.switch_to.frame(iframe2)
-        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
-        print(element)
-        (ActionChains(driver)
-         .move_to_element(element)
-         .click().perform())
+
+        button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
+        button_ok.click()
+
+        self.answering(driver)
+
+    def answering(self, driver):
+        wait = WebDriverWait(driver, 10)
+        question = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewPrompt > table > tbody > tr > td:nth-child(2)')))
+        print(question.text)
+        answers_parent = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewChoices')))
+        answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
+        for answer in answers:
+            print(answer.text)
+            answer.click()
+        button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
+        button_next.click()
 
     def login(self, driver):
         wait = WebDriverWait(driver, 10)
