@@ -12,3 +12,4 @@ class Settings:
     # Set a logger cache outside the InstaPy object to avoid re-instantiation issues
     loggers = {}
     logger = None
+    assets_location = os.path.join(BASE_DIR, 'assets')

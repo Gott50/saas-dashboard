@@ -17,6 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 from .settings import Settings
+from .answers import Answers
 
 
 class Bot:
@@ -102,11 +103,12 @@ class Bot:
 
         return self
 
-    def act(self, url):
+    def act(self, url, answer_file):
         driver = self.browser
         driver.get(url)
         self.login(driver)
-        self.start_test(driver)
+        answers = Answers(answer_file)
+        self.start_test(driver, answers)
 
     def start_test(self, driver):
         wait = WebDriverWait(driver, 10)
