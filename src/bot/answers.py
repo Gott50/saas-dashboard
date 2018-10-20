@@ -23,3 +23,25 @@ class Answers:
 
     def new_entry(self, quesiton, options):
         return options
+
+    def extract_number(self, quesiton):
+        if "zwei" in quesiton:
+            return 2
+        if "drei" in quesiton:
+            return 3
+        if "vier" in quesiton:
+            return 4
+        if "fünf" in quesiton:
+            return 5
+        if "sechs" in quesiton:
+            return 6
+        if "sieben" in quesiton:
+            return 7
+        if "acht" in quesiton:
+            return 8
+        if "neun" in quesiton:
+            return 9
+        if "zehn" in quesiton:
+            return 10
+        else
+            return 1
