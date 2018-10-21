@@ -1,5 +1,6 @@
 import itertools
 import os
+import random
 
 import openpyxl
 
@@ -16,6 +17,10 @@ class Answers:
         for cell in self.sheet['A']:
             if cell.value == question:
                 row = cell.row
+                number = self.sheet['B%s' % row].value
+                if number == 0:
+                    return list(filter(lambda a: random.choice([True, False]), options))
+
                 answer = list(self.get_answer(row, options))
                 self.save_answer(answer, row)
                 self.save()
@@ -30,8 +35,7 @@ class Answers:
             offset = 3 + size * number
             self.sheet[row][offset + i].value = answer[i]
 
-    def get_answer(self, row, options):
-        number = self.sheet['B%s' % row].value
+    def get_answer(self, row, options, number):
         answers = list(map(lambda c: c.value, self.sheet[row][2:]))
         if answers[0]:
             return answers[0:number]
@@ -54,7 +58,6 @@ class Answers:
         number = self.extract_number(question)
         if number == 0:
             answer = options
-            number = 1
         else:
             answer = options[:number]
 
