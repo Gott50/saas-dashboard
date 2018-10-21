@@ -21,7 +21,7 @@ class Answers:
                 if number == 0:
                     return list(filter(lambda a: random.choice([True, False]), options))
 
-                answer = list(self.get_answer(row, options))
+                answer = list(self.get_answer(row, options, number))
                 self.save_answer(answer, row)
                 self.save()
                 return answer
