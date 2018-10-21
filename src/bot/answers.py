@@ -1,7 +1,8 @@
+import os
+
 import openpyxl
 
 from .settings import Settings
-import os
 
 
 class Answers:
@@ -10,11 +11,11 @@ class Answers:
         self.wb = openpyxl.load_workbook(self.location)
         self.sheet = self.wb[self.wb.sheetnames[0]]
 
-    def get(self, question, options=[]):
+    def get(self, question, options):
         print(self.sheet['A'])
         for cell in self.sheet['A']:
             print(cell.value)
-            if(cell.value == question):
+            if (cell.value == question):
                 return self.get_answer(options)
         return self.new_entry(question, options)
 
