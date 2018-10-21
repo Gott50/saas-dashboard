@@ -19,8 +19,23 @@ class Answers:
                 return self.get_answer(options)
         return self.new_entry(question, options)
 
-    def get_answer(self, options):
-        return []
+    def get_answer(self, row, options):
+        number = self.sheet['B%s' % row].value
+        answers = list(map(lambda c: c.value, self.sheet[row][2:]))
+        if answers[0]:
+            return answers[0:number]
+        else:
+            print("number: %s" % number)
+            print("options: %s" % options)
+            return self.possible_answers(options, answers, number)[0]
+
+    def possible_answers(self, options, answers, number):
+        return list(map(lambda a: list(a),
+                        filter(lambda a: list(a) not in self.wrong_answers(answers, number),
+                               itertools.combinations(options, number))))
+
+    def wrong_answers(self, answers, number):
+        return list(filter(lambda a: a[0], self.array_split(answers, number)))
 
     def new_entry(self, question, options):
         number = self.extract_number(question)
