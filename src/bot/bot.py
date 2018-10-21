@@ -109,7 +109,13 @@ class Bot:
         self.login(driver)
         answers = Answers(answer_file)
         self.start_test(driver)
-        self.answering(driver, answers)
+
+        try:
+            while True:
+                self.answering(driver, answers)
+        except:
+            print("done Answering")
+
 
     def start_test(self, driver):
         wait = WebDriverWait(driver, 10)
@@ -137,14 +143,15 @@ class Bot:
         for test_answer in test_answers:
             options = options + [test_answer.text]
 
-        answers = answers.get(question=question.text, options=options)
+        a = answers.get(question=question.text, options=options)
 
         for test_answer in test_answers:
-            if test_answer in answers:
+            if test_answer.text in a:
                 test_answer.click()
 
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         button_next.click()
+        print("answered")
 
     def login(self, driver):
         wait = WebDriverWait(driver, 10)
@@ -158,6 +165,7 @@ class Bot:
          .move_to_element(element)
          .click().send_keys(self.password).perform())
         driver.find_element_by_id("idSIButton9").click()
+        print("logged in")
 
     def end(self):
         """Closes the current session"""
