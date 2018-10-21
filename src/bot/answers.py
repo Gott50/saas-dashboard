@@ -1,3 +1,4 @@
+import itertools
 import os
 
 import openpyxl
@@ -12,11 +13,12 @@ class Answers:
         self.sheet = self.wb[self.wb.sheetnames[0]]
 
     def get(self, question, options):
-        print(self.sheet['A'])
         for cell in self.sheet['A']:
-            print(cell.value)
             if cell.value == question:
-                return self.get_answer(options)
+                row = cell.row
+                answer = list(self.get_answer(row, options))
+                self.save()
+                return answer
         return self.new_entry(question, options)
 
     def get_answer(self, row, options):
@@ -25,16 +27,18 @@ class Answers:
         if answers[0]:
             return answers[0:number]
         else:
-            print("number: %s" % number)
-            print("options: %s" % options)
-            return self.possible_answers(options, answers, number)[0]
+            possible_answers = self.possible_answers(options, row, number)
 
-    def possible_answers(self, options, answers, number):
+            return possible_answers[0]
+
+    def possible_answers(self, options, row, number):
+        wrong_answers = self.wrong_answers(row, number)
         return list(map(lambda a: list(a),
-                        filter(lambda a: list(a) not in self.wrong_answers(answers, number),
+                        filter(lambda a: list(a) not in wrong_answers,
                                itertools.combinations(options, number))))
 
-    def wrong_answers(self, answers, number):
+    def wrong_answers(self, row, number):
+        answers = list(filter(lambda a: a, map(lambda c: c.value, self.sheet[row][2:])))
         return list(filter(lambda a: a[0], self.array_split(answers, number)))
 
     def new_entry(self, question, options):
