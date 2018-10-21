@@ -27,7 +27,7 @@ class Answers:
         wrong_answers = self.wrong_answers(row, number)
         size = len(wrong_answers)
         for i in range(number):
-            offset = 2 + size * number + number
+            offset = 3 + size * number
             self.sheet[row][offset + i].value = answer[i]
 
     def get_answer(self, row, options):
@@ -58,7 +58,7 @@ class Answers:
         else:
             answer = options[:number]
 
-        self.sheet.append([question, number] + self.create_space(number) + answer)
+        self.sheet.append([question, number, None] + answer)
         self.save()
         return answer
 
@@ -105,12 +105,6 @@ class Answers:
             return 10
         else:
             return 0
-
-    def create_space(self, number: int):
-        out = []
-        for i in range(number):
-            out = out + [None]
-        return out
 
     def save(self):
         self.wb.save(self.location)
