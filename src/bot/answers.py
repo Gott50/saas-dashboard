@@ -6,9 +6,9 @@ import os
 
 class Answers:
     def __init__(self, answer_file):
-        location = os.path.join(Settings.assets_location, answer_file)
-        wb = openpyxl.load_workbook(location)
-        self.sheet = wb[wb.sheetnames[0]]
+        self.location = os.path.join(Settings.assets_location, answer_file)
+        self.wb = openpyxl.load_workbook(self.location)
+        self.sheet = self.wb[self.wb.sheetnames[0]]
 
     def get(self, question, options=[]):
         print(self.sheet['A'])
@@ -22,7 +22,11 @@ class Answers:
         return []
 
     def new_entry(self, quesiton, options):
-        return options
+        number = self.extract_number(quesiton)
+        answer = options[:number]
+        self.sheet.append([quesiton, number] + self.create_space(number) + options[:number])
+        self.save()
+        return answer
 
     def extract_number(self, quesiton):
         if "zwei" in quesiton:
@@ -43,5 +47,14 @@ class Answers:
             return 9
         if "zehn" in quesiton:
             return 10
-        else
+        else:
             return 1
+
+    def create_space(self, number: int):
+        out = []
+        for i in range(number):
+            out = out + [None]
+        return out
+
+    def save(self):
+        self.wb.save(self.location)
