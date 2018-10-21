@@ -24,8 +24,13 @@ class Answers:
 
     def new_entry(self, question, options):
         number = self.extract_number(question)
-        answer = options[:number]
-        self.sheet.append([question, number] + self.create_space(number) + options[:number])
+        if number == 0:
+            answer = options
+            number = 1
+        else:
+            answer = options[:number]
+
+        self.sheet.append([question, number] + self.create_space(number) + answer)
         self.save()
         return answer
 
