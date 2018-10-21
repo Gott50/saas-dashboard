@@ -78,7 +78,7 @@ class Bot:
             chrome_options.add_extension(self.proxy_chrome_extension)
 
         chrome_prefs = {
-            'intl.accept_languages': 'en-US'
+            'intl.accept_languages': 'de-DE'
         }
         chrome_options.add_experimental_option('prefs', chrome_prefs)
         try:
@@ -108,7 +108,8 @@ class Bot:
         driver.get(url)
         self.login(driver)
         answers = Answers(answer_file)
-        self.start_test(driver, answers)
+        self.start_test(driver)
+        self.answering(driver, answers)
 
     def start_test(self, driver):
         wait = WebDriverWait(driver, 10)
@@ -120,18 +121,18 @@ class Bot:
         button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
         button_ok.click()
 
-        self.answering(driver)
-
-    def answering(self, driver):
+    def answering(self, driver, answers):
         wait = WebDriverWait(driver, 10)
         question = wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewPrompt > table > tbody > tr > td:nth-child(2)')))
         print(question.text)
         answers_parent = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewChoices')))
-        answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
-        for answer in answers:
-            print(answer.text)
-            answer.click()
+        test_answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
+        for test_answer in test_answers:
+            print(test_answer.text)
+            test_answer.click()
+
+
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         button_next.click()
 
