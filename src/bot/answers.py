@@ -17,9 +17,18 @@ class Answers:
             if cell.value == question:
                 row = cell.row
                 answer = list(self.get_answer(row, options))
+                self.save_answer(answer, row)
                 self.save()
                 return answer
         return self.new_entry(question, options)
+
+    def save_answer(self, answer, row):
+        number = self.sheet['B%s' % row].value
+        wrong_answers = self.wrong_answers(row, number)
+        size = len(wrong_answers)
+        for i in range(number):
+            offset = 2 + size * number + number
+            self.sheet[row][offset + i].value = answer[i]
 
     def get_answer(self, row, options):
         number = self.sheet['B%s' % row].value
