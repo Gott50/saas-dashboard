@@ -15,7 +15,7 @@ class Answers:
         print(self.sheet['A'])
         for cell in self.sheet['A']:
             print(cell.value)
-            if (cell.value == question):
+            if cell.value == question:
                 return self.get_answer(options)
         return self.new_entry(question, options)
 
