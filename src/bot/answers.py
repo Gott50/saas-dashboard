@@ -30,6 +30,8 @@ class Answers:
         return answer
 
     def extract_number(self, question):
+        if "eine" in question:
+            return 1
         if "zwei" in question:
             return 2
         if "drei" in question:
@@ -48,8 +50,28 @@ class Answers:
             return 9
         if "zehn" in question:
             return 10
-        else:
+        if "one" in question:
             return 1
+        if "two" in question:
+            return 2
+        if "three" in question:
+            return 3
+        if "four" in question:
+            return 4
+        if "five" in question:
+            return 5
+        if "six" in question:
+            return 6
+        if "seven" in question:
+            return 7
+        if "eight" in question:
+            return 8
+        if "nine" in question:
+            return 9
+        if "ten" in question:
+            return 10
+        else:
+            return 0
 
     def create_space(self, number: int):
         out = []
