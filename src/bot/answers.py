@@ -22,31 +22,31 @@ class Answers:
     def get_answer(self, options):
         return []
 
-    def new_entry(self, quesiton, options):
-        number = self.extract_number(quesiton)
+    def new_entry(self, question, options):
+        number = self.extract_number(question)
         answer = options[:number]
-        self.sheet.append([quesiton, number] + self.create_space(number) + options[:number])
+        self.sheet.append([question, number] + self.create_space(number) + options[:number])
         self.save()
         return answer
 
-    def extract_number(self, quesiton):
-        if "zwei" in quesiton:
+    def extract_number(self, question):
+        if "zwei" in question:
             return 2
-        if "drei" in quesiton:
+        if "drei" in question:
             return 3
-        if "vier" in quesiton:
+        if "vier" in question:
             return 4
-        if "fünf" in quesiton:
+        if "fünf" in question:
             return 5
-        if "sechs" in quesiton:
+        if "sechs" in question:
             return 6
-        if "sieben" in quesiton:
+        if "sieben" in question:
             return 7
-        if "acht" in quesiton:
+        if "acht" in question:
             return 8
-        if "neun" in quesiton:
+        if "neun" in question:
             return 9
-        if "zehn" in quesiton:
+        if "zehn" in question:
             return 10
         else:
             return 1
