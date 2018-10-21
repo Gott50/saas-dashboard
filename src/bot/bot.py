@@ -118,8 +118,12 @@ class Bot:
         iframe2 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#contentFrame')))
         driver.switch_to.frame(iframe2)
 
-        button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
-        button_ok.click()
+        try:
+            button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
+            button_ok.click()
+        except:
+            print("no button_ok")
+        print("started Test")
 
     def answering(self, driver, answers):
         wait = WebDriverWait(driver, 10)
