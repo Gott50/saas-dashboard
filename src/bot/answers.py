@@ -86,3 +86,7 @@ class Answers:
 
     def save(self):
         self.wb.save(self.location)
+
+    def array_split(self, l, n):
+        for i in range(0, len(l), n):
+            yield l[i:i + n]
