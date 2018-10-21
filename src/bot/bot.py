@@ -128,10 +128,16 @@ class Bot:
         print(question.text)
         answers_parent = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewChoices')))
         test_answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
-        for test_answer in test_answers:
-            print(test_answer.text)
-            test_answer.click()
 
+        options = []
+        for test_answer in test_answers:
+            options = options + [test_answer.text]
+
+        answers = answers.get(question=question.text, options=options)
+
+        for test_answer in test_answers:
+            if test_answer in answers:
+                test_answer.click()
 
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         button_next.click()
