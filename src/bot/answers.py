@@ -83,25 +83,25 @@ class Answers:
             return 9
         if "zehn" in question:
             return 10
-        if "one" in question:
+        if "Select one answers" in question:
             return 1
-        if "two" in question:
+        if "Select two answers" in question:
             return 2
-        if "three" in question:
+        if "Select three answers" in question:
             return 3
-        if "four" in question:
+        if "Select four answers" in question:
             return 4
-        if "five" in question:
+        if "Select five answers" in question:
             return 5
-        if "six" in question:
+        if "Select six answers" in question:
             return 6
-        if "seven" in question:
+        if "Select seven answers" in question:
             return 7
-        if "eight" in question:
+        if "Select eight answers" in question:
             return 8
-        if "nine" in question:
+        if "Select nine answers" in question:
             return 9
-        if "ten" in question:
+        if "Select ten answers" in question:
             return 10
         else:
             return 0
