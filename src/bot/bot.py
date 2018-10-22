@@ -103,11 +103,13 @@ class Bot:
 
         return self
 
-    def act(self, url, answer_file):
+    def act(self, answer_file, url=None):
         driver = self.browser
-        driver.get(url)
-        self.login(driver)
         answers = Answers(answer_file)
+        u = url or answers.url()
+        print("url: %s" % u)
+        driver.get(u)
+        self.login(driver)
         self.start_test(driver)
 
         try:
