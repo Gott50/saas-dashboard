@@ -113,7 +113,7 @@ class Bot:
         try:
             while True:
                 self.answering(driver, answers)
-        except:
+        except selenium.common.exceptions.TimeoutException:
             print("done Answering")
 
 
@@ -127,7 +127,7 @@ class Bot:
         try:
             button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
             button_ok.click()
-        except:
+        except selenium.common.exceptions.TimeoutException:
             print("no button_ok")
         print("started Test")
 
