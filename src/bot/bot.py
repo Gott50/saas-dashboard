@@ -51,7 +51,7 @@ class Bot:
         chrome_options = Options()
         chrome_options.add_argument('--dns-prefetch-disable')
         chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--lang=en-US')
+        chrome_options.add_argument('--lang=de-DE')
         chrome_options.add_argument('--disable-setuid-sandbox')
 
         # this option implements Chrome Headless, a new (late 2017)
