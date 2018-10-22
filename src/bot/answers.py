@@ -20,11 +20,8 @@ class Answers:
                 number = self.sheet['B%s' % row].value
                 if number == 0:
                     return list(filter(lambda a: random.choice([True, False]), options))
-
-                answer = list(self.get_answer(row, options, number))
-                self.save_answer(answer, row)
-                self.save()
-                return answer
+                else:
+                    return self.get_answer(row, options, number)
         return self.new_entry(question, options)
 
     def save_answer(self, answer, row):
@@ -41,8 +38,10 @@ class Answers:
             return answers[0:number]
         else:
             possible_answers = self.possible_answers(options, row, number)
-
-            return possible_answers[0]
+            answer = list(possible_answers[0])
+            self.save_answer(answer, row)
+            self.save()
+            return answer
 
     def possible_answers(self, options, row, number):
         wrong_answers = self.wrong_answers(row, number)
@@ -86,7 +85,7 @@ class Answers:
             return 9
         if "zehn" in question:
             return 10
-        if "Select one answers" in question:
+        if "Select one answer" in question:
             return 1
         if "Select two answers" in question:
             return 2
@@ -115,3 +114,6 @@ class Answers:
     def array_split(self, l, n):
         for i in range(0, len(l), n):
             yield l[i:i + n]
+
+    def url(self):
+        return self.sheet['A1'].value
