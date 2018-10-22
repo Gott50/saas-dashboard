@@ -37,11 +37,14 @@ class Answers:
         if answers[0]:
             return answers[0:number]
         else:
-            possible_answers = self.possible_answers(options, row, number)
-            answer = list(possible_answers[0])
-            self.save_answer(answer, row)
-            self.save()
-            return answer
+            return self.new_answer(number, options, row)
+
+    def new_answer(self, number, options, row):
+        possible_answers = self.possible_answers(options, row, number)
+        answer = list(possible_answers[0])
+        self.save_answer(answer, row)
+        self.save()
+        return answer
 
     def possible_answers(self, options, row, number):
         wrong_answers = self.wrong_answers(row, number)
