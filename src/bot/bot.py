@@ -40,6 +40,7 @@ class Bot:
         self.proxy_port = proxy_port
         self.proxy_chrome_extension = proxy_chrome_extension
         self.page_delay = page_delay
+        self.answered = []
 
         if selenium_local_session:
             self.set_selenium_local_session()
@@ -118,7 +119,6 @@ class Bot:
         except selenium.common.exceptions.TimeoutException:
             print("done Answering")
 
-
     def start_test(self, driver):
         wait = WebDriverWait(driver, 10)
         iframe1 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#course-player-container iframe')))
@@ -143,17 +143,22 @@ class Bot:
 
         options = []
         for test_answer in test_answers:
-            options = options + [test_answer.text]
+            options += [test_answer.text]
 
-        a = answers.get(question=question.text, options=options)
-
-        for test_answer in test_answers:
-            if test_answer.text in a:
-                test_answer.click()
+        a = list(map(lambda e: str(e).replace(" ", ""), answers.get(question=question.text, options=options)))
+        if str(question.text) not in self.answered:
+            for test_answer in test_answers:
+                if str(test_answer.text).replace(" ", "") in a:
+                    test_answer.click()
+            self.answered += [str(question.text)]
+            print("answered")
+        else:
+            print("skipped:")
+            raise Exception(a)
 
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         button_next.click()
-        print("answered")
+
 
     def login(self, driver):
         wait = WebDriverWait(driver, 10)
