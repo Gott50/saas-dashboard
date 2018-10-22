@@ -15,7 +15,7 @@ class Answers:
 
     def get(self, question, options):
         for cell in self.sheet['A']:
-            if cell.value == question:
+            if str(cell.value).replace(" ", "") == str(question).replace(" ", ""):
                 row = cell.row
                 number = self.sheet['B%s' % row].value
                 if number == 0:
