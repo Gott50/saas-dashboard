@@ -31,6 +31,7 @@ class Answers:
         for i in range(number):
             offset = 3 + size * number
             self.sheet[row][offset + i].value = answer[i]
+        print('saved new possible Answer: \n%s' % answer)
 
     def get_answer(self, row, options, number):
         answers = list(map(lambda c: c.value, self.sheet[row][2:]))
