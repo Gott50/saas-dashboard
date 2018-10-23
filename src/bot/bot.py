@@ -135,16 +135,20 @@ class Bot:
 
     def answering(self, driver, answers):
         wait = WebDriverWait(driver, 10)
+        button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
+        self.answer_question(answers, wait)
+
+        button_next.click()
+
+    def answer_question(self, answers, wait):
         question = wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewPrompt > table > tbody > tr > td:nth-child(2)')))
         print(question.text)
         answers_parent = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewChoices')))
         test_answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
-
         options = []
         for test_answer in test_answers:
             options += [test_answer.text]
-
         a = list(map(lambda e: str(e).replace(" ", ""), answers.get(question=question.text, options=options)))
         if str(question.text) not in self.answered:
             for test_answer in test_answers:
@@ -154,11 +158,6 @@ class Bot:
             print("answered")
         else:
             print("skipped:")
-            raise Exception(a)
-
-        button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
-        button_next.click()
-
 
     def login(self, driver):
         wait = WebDriverWait(driver, 10)
