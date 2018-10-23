@@ -74,25 +74,25 @@ class Answers:
         return answer
 
     def extract_number(self, question):
-        if "eine" in question:
+        if "Wählen Sie eine" in question:
             return 1
-        if "zwei" in question:
+        if "Wählen Sie zwei" in question:
             return 2
-        if "drei" in question:
+        if "Wählen Sie drei" in question:
             return 3
-        if "vier" in question:
+        if "Wählen Sie vier" in question:
             return 4
-        if "fünf" in question:
+        if "Wählen Sie fünf" in question:
             return 5
-        if "sechs" in question:
+        if "Wählen Sie sechs" in question:
             return 6
-        if "sieben" in question:
+        if "Wählen Sie sieben" in question:
             return 7
-        if "acht" in question:
+        if "Wählen Sie acht" in question:
             return 8
-        if "neun" in question:
+        if "Wählen Sie neun" in question:
             return 9
-        if "zehn" in question:
+        if "Wählen Sie zehn" in question:
             return 10
         if "Select one answer" in question:
             return 1
