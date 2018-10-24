@@ -154,10 +154,11 @@ class Bot:
             for test_answer in test_answers:
                 if str(test_answer.text).replace(" ", "") in a:
                     test_answer.click()
-            self.answered += [str(question.text)]
+                    if str(question.text) not in self.answered:
+                        self.answered += [str(question.text)]
             print("answered")
         else:
-            print("skipped:")
+            print("skipped")
 
     def login(self, driver):
         wait = WebDriverWait(driver, 10)
