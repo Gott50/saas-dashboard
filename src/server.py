@@ -1,10 +1,10 @@
 import os
 
-from flask import Flask, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, request, redirect, flash
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
+ALLOWED_EXTENSIONS = set(['xlsx', 'xlsm', 'xltx', 'xltm'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -31,8 +31,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            return "uploaded %s" % filename
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -42,11 +41,6 @@ def upload_file():
          <input type=submit value=Upload>
     </form>
     '''
-
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 if __name__ == '__main__':

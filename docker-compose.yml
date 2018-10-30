@@ -10,9 +10,7 @@ services:
     links:
       - selenium:selenium
     environment:
-      - USERNAME=xxx
-      - PASSWORD=xxx
-      - ANSWER_FILE=xxx
+      - UPLOAD_FOLDER=xxx
   selenium:
     container_name: selenium
     image: selenium/standalone-chrome
