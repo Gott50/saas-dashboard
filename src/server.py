@@ -15,6 +15,10 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+def list_uploads():
+    return os.listdir(UPLOAD_FOLDER)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -32,7 +36,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return "uploaded %s" % filename
-    return render_template('upload.html')
+    return render_template('upload.html', uploads=list_uploads())
 
 
 if __name__ == '__main__':

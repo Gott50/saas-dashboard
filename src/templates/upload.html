@@ -1,6 +1,15 @@
 <!doctype html>
-<title>Upload new File</title>
-<h1>Upload new File</h1>
+<form>
+    {% for item in uploads %}
+        <div>
+            <input type="checkbox">
+            <label>{{ item }}</label>
+        </div>
+    {% endfor %}
+</form>
+
+
+<h3>Upload new File</h3>
 <form method=post enctype=multipart/form-data>
     <p><input type=file name=file>
         <input type=submit value=Upload>
