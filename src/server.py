@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from bot import Bot
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
-ALLOWED_EXTENSIONS = set(['xlsx', 'xlsm', 'xltx', 'xltm'])
+ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
