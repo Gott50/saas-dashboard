@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, request, redirect, flash, render_template
 from werkzeug.utils import secure_filename
+from bot import Bot
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 ALLOWED_EXTENSIONS = set(['xlsx', 'xlsm', 'xltx', 'xltm'])
@@ -41,11 +42,14 @@ def upload_file():
 
 @app.route('/users', methods=['POST'])
 def create_checkout():
-    app.logger.info(request.form)
-    username = request.form['username']
-    password = request.form['password']
+    bot = Bot(username=request.form['username'],
+              password=request.form['password'])
+    for f in request.form:
+        if not (f == 'username' or f == 'password') and request.form[f] == 'on':
+            app.logger.info('Starting: %s' % f)
+            bot.act(answer_file=f)
 
-    return str(request.form)
+    return "DONE"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
