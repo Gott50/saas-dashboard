@@ -39,5 +39,13 @@ def upload_file():
     return render_template('upload.html', uploads=list_uploads())
 
 
+@app.route('/users', methods=['POST'])
+def create_checkout():
+    app.logger.info(request.form)
+    username = request.form['username']
+    password = request.form['password']
+
+    return str(request.form)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
