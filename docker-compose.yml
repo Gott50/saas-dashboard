@@ -4,13 +4,13 @@ services:
     build: .
     image: gott50/saas-bot
     volumes:
-      - ./src/assets:/app/assets
+      - ./src/uploads:/app/uploads
     depends_on:
       - selenium
     links:
       - selenium:selenium
     environment:
-      - UPLOAD_FOLDER=xxx
+      - UPLOAD_FOLDER=./uploads
   selenium:
     container_name: selenium
     image: selenium/standalone-chrome
