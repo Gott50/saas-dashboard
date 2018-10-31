@@ -46,8 +46,11 @@ def create_checkout():
               password=request.form['password'])
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
-            app.logger.info('Starting: %s' % f)
-            bot.act(answer_file=f)
+            try:
+                app.logger.info('Starting: %s' % f)
+                bot.act(answer_file=f)
+            except Exception as e:
+                app.logger.warning(e)
 
     return "DONE"
 
