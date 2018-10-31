@@ -1,16 +1,19 @@
 <!doctype html>
-<form>
+<form method="post" action="/users">
     <div>
-        <label>Username: <input type="text">
+        <label for="username">Username:
+            <input type="text" name="username" required>
         </label>
     </div>
     <div>
-        <label>Password: <input type="password">
+        <label for="password">Password:
+            <input type="password" name="password" required>
         </label>
     </div>
     {% for item in uploads %}
         <div>
-            <label><input type="checkbox">{{ item }}</label>
+            <label for="{{ item }}">
+                <input type="checkbox" name="{{ item }}">{{ item }}</label>
         </div>
     {% endfor %}
     <input type=submit value=Start>
