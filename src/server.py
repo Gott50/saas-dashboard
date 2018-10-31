@@ -11,6 +11,15 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+def make_dir():
+    try:
+        app.logger.info("mkdir %s" % os.mkdir(UPLOAD_FOLDER))
+    except Exception as e:
+        app.logger.info(e)
+
+
+make_dir()
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
