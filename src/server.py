@@ -51,8 +51,8 @@ def upload_file():
 
 @app.route('/users', methods=['POST'])
 def create_checkout():
-    bot = Bot(username=request.form['username'],
-              password=request.form['password'])
+    bot = init_Bot()
+
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
             try:
@@ -63,5 +63,25 @@ def create_checkout():
 
     return "DONE"
 
+def init_Bot():
+    if os.environ.get('SELENIUM'):
+        bot = Bot(username=request.form['username'],
+                  password=request.form['password'],
+                  selenium_local_session=False)
+        bot.set_selenium_remote_session(
+            selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM', 'selenium'), 4444))
+    else:
+        bot = Bot(username=request.form['username'],
+                  password=request.form['password'],
+                  selenium_local_session=True)
+    return bot
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+
+@app.route('/user/<username>')
+def show_user_profile(username):
+    # show the user profile for that user
+    return 'User %s' % username

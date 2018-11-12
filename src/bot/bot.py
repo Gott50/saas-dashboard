@@ -41,6 +41,7 @@ class Bot:
         self.proxy_chrome_extension = proxy_chrome_extension
         self.page_delay = page_delay
         self.answered = []
+        self.selenium_local_session = selenium_local_session
 
         if selenium_local_session:
             self.set_selenium_local_session()
@@ -101,6 +102,19 @@ class Bot:
         self.browser.implicitly_wait(self.page_delay)
         print('Session started - %s'
               % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+
+        return self
+
+    def set_selenium_remote_session(self, selenium_url=''):
+        """Starts remote session for a selenium server.
+         Useful for docker setup."""
+        self.browser = webdriver.Remote(
+            command_executor=selenium_url,
+            desired_capabilities=DesiredCapabilities.CHROME)
+
+        message = "Session started!"
+        print(self.username, message, "initialization", "info")
+        print('')
 
         return self
 
