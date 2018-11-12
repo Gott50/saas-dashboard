@@ -24,7 +24,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk del .build-deps
 
 COPY ./src/bot/ ./bot/
-COPY ./src/start.py ./start.py
+COPY ./src/server.py ./server.py
 
 EXPOSE 5000
-CMD python start.py
+CMD python server.py
