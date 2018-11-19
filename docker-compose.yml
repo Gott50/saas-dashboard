@@ -5,6 +5,7 @@ services:
     image: gott50/saas-bot
     volumes:
       - ./src/uploads:/app/uploads
+      - ./src/bot:/app/bot
     ports:
       - 5000:5000
     depends_on:
