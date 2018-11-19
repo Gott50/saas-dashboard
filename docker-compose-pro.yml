@@ -1,19 +1,21 @@
 version: '3'
 services:
   bot:
-    build: .
     image: gott50/saas-bot
     volumes:
-      - ./src/uploads:/app/uploads
+    - uploads_data:/app/uploads
+    ports:
+    - 5000:5000
     depends_on:
-      - selenium
+    - selenium
     links:
-      - selenium:selenium
+    - selenium:selenium
     environment:
-      - UPLOAD_FOLDER=./uploads
+    - UPLOAD_FOLDER=/app/uploads
+    - SELENIUM=selenium
   selenium:
-    container_name: selenium
     image: selenium/standalone-chrome
     shm_size: 128M
-    ports:
-    - "4444:4444"
+
+volumes:
+  uploads_data:
