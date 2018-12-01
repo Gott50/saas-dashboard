@@ -51,7 +51,7 @@ def upload_file():
     return render_template('upload.html', uploads=list_uploads())
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/user', methods=['POST'])
 def create_checkout():
     bot = init_Bot()
 
