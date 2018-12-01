@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-from time import sleep
 
 import selenium
 from selenium import webdriver
@@ -16,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.webdriver.common.action_chains import ActionChains
 
+from bot.time_util import sleep
 from .settings import Settings
 from .answers import Answers
 
@@ -125,16 +125,19 @@ class Bot:
         print("url: %s" % u)
         driver.get(u)
         self.login(driver)
+        sleep()
         self.start_test(driver)
+        sleep()
 
         try:
             while True:
                 self.answering(driver, answers)
+                sleep()
         except selenium.common.exceptions.TimeoutException:
             print("done Answering")
 
     def start_test(self, driver):
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
         iframe1 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#course-player-container iframe')))
         driver.switch_to.frame(iframe1)
         iframe2 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#contentFrame')))
@@ -142,16 +145,17 @@ class Bot:
 
         try:
             button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
+            sleep()
             button_ok.click()
         except selenium.common.exceptions.TimeoutException:
             print("no button_ok")
         print("started Test")
 
     def answering(self, driver, answers):
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         self.answer_question(answers, wait)
-
+        sleep()
         button_next.click()
 
     def answer_question(self, answers, wait):
@@ -167,6 +171,7 @@ class Bot:
         if str(question.text) not in self.answered:
             for test_answer in test_answers:
                 if str(test_answer.text).replace(" ", "") in a:
+                    sleep()
                     test_answer.click()
                     if str(question.text) not in self.answered:
                         self.answered += [str(question.text)]
@@ -175,12 +180,14 @@ class Bot:
             print("skipped")
 
     def login(self, driver):
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
         element = wait.until(EC.element_to_be_clickable((By.ID, 'i0116')))
         (ActionChains(driver)
          .move_to_element(element)
          .click().send_keys(self.username).perform())
+        sleep(5)
         driver.find_element_by_id("idSIButton9").click()
+        sleep(5)
         element = wait.until(EC.element_to_be_clickable((By.ID, 'i0118')))
         (ActionChains(driver)
          .move_to_element(element)
