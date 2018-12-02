@@ -1,5 +1,9 @@
 #!/bin/sh
 
+docker-compose build
+docker-compose push
+
+
 docker-machine create --driver $@
 name=${@: -1}
 MANAGER_IP=$(docker-machine ip $name)
