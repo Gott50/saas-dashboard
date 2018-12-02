@@ -1,9 +1,10 @@
 import os
 
-from flask import Flask, request, redirect, flash, render_template
+from flask import Flask, request, redirect, flash, render_template, jsonify
 from werkzeug.utils import secure_filename
 from bot import Bot
 from bot.settings import Settings
+from bot.users import Users
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 Settings.assets_location=UPLOAD_FOLDER
@@ -58,12 +59,12 @@ def create_checkout():
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
             try:
-                app.logger.info('Starting: %s' % f)
+                app.logger.warning('Starting: %s' % f)
                 bot.act(answer_file=f)
             except Exception as e:
                 app.logger.warning(e)
 
-    return "DONE"
+    return redirect('/user/%s' % request.form['username'])
 
 def init_Bot():
     if os.environ.get('SELENIUM'):
@@ -79,11 +80,13 @@ def init_Bot():
     return bot
 
 
+@app.route('/user/<username>', methods=['GET'])
+def show_user_profile(username):
+    if username in Users.users:
+        user = Users.users[username]
+        return jsonify(user)
+    return "User not found: %s" % username
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
-
-@app.route('/user/<username>')
-def show_user_profile(username):
-    # show the user profile for that user
-    return 'User %s' % username

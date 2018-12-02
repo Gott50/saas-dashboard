@@ -16,6 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 from bot.time_util import sleep
+from bot.users import Users
 from .settings import Settings
 from .answers import Answers
 
@@ -134,6 +135,12 @@ class Bot:
                 self.answering(driver, answers)
                 sleep()
         except selenium.common.exceptions.TimeoutException:
+            text = driver.find_element_by_id("Assessment").text
+            if self.username in Users.users:
+                Users.users[self.username][answer_file] = {}
+            else:
+                Users.users[self.username] = {answer_file: text}
+
             print("done Answering")
 
     def start_test(self, driver):
