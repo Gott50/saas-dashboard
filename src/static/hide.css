@@ -1,0 +1,16 @@
+.assessment-content-bottom-container,
+#QuestionNavBarTitle,
+.ResultsReportHeader,
+#assessment-mismatch-result-icon,
+#assessment-mismatch-line1,
+
+.AssessmentSettingsContainer,
+#editor,
+#error-view
+{
+    display: none !important;
+}
+
+.ReportQuestions.scrollable-data-container.ui-accordion.ui-widget.ui-helper-reset {
+    height: auto !important;
+}
