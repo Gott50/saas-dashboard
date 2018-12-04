@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, redirect, flash, render_template, jsonify
+from flask import Flask, request, redirect, flash, render_template
 from werkzeug.utils import secure_filename
 
 from bot import Bot
@@ -88,8 +88,18 @@ def init_Bot():
 def show_user_profile(username):
     if username in Users.users:
         user = Users.users[username]
-        return jsonify(user)
+        return compose_user_view(user)
     return "User not found: %s" % username
+
+
+def compose_user_view(user):
+    view = render_template('user_prefix.html')
+
+    for test in user:
+        view += '<h2>%s</h2>' % test
+        view += user[test].replace('style="display: none;"', '')
+
+    return view
 
 
 if __name__ == '__main__':

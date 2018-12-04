@@ -135,7 +135,7 @@ class Bot:
                 self.answering(driver, answers)
                 sleep()
         except selenium.common.exceptions.TimeoutException:
-            text = driver.find_element_by_id("Assessment").text
+            text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
             if self.username in Users.users:
                 Users.users[self.username][answer_file] = {}
             else:
