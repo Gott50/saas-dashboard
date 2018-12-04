@@ -2,12 +2,13 @@ import os
 
 from flask import Flask, request, redirect, flash, render_template, jsonify
 from werkzeug.utils import secure_filename
+
 from bot import Bot
 from bot.settings import Settings
 from bot.users import Users
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
-Settings.assets_location=UPLOAD_FOLDER
+Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
 app = Flask(__name__)
@@ -22,6 +23,7 @@ def make_dir():
 
 
 make_dir()
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -38,7 +40,8 @@ def upload_file():
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(request.url)  # TODO fix: RuntimeError: The session is unavailable because no secret key was set.  Set the secret_key on the application to something unique and secret.
+            return redirect(
+                request.url)  # TODO fix: RuntimeError: The session is unavailable because no secret key was set.  Set the secret_key on the application to something unique and secret.
         file = request.files['file']
         # if user does not select file, browser also
         # submit a empty part without filename
@@ -65,6 +68,7 @@ def create_checkout():
                 app.logger.warning(e)
 
     return redirect('/user/%s' % request.form['username'])
+
 
 def init_Bot():
     if os.environ.get('SELENIUM'):
