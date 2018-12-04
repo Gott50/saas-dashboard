@@ -135,13 +135,16 @@ class Bot:
                 self.answering(driver, answers)
                 sleep()
         except selenium.common.exceptions.TimeoutException:
-            text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
-            if self.username in Users.users:
-                Users.users[self.username][answer_file] = text
-            else:
-                Users.users[self.username] = {answer_file: text}
+            self.save_assessment(answer_file, driver)
 
             print("done Answering")
+
+    def save_assessment(self, answer_file, driver):
+        text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
+        if self.username in Users.users:
+            Users.users[self.username][answer_file] = text
+        else:
+            Users.users[self.username] = {answer_file: text}
 
     def start_test(self, driver):
         wait = WebDriverWait(driver, 20)
