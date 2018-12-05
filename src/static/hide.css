@@ -2,11 +2,11 @@
 #QuestionNavBarTitle,
 .ResultsReportHeader,
 #assessment-mismatch-result-icon,
-#assessment-mismatch-line1,
 
 .AssessmentSettingsContainer,
 #editor,
-#error-view
+#error-view,
+#overlay-container
 {
     display: none !important;
 }
