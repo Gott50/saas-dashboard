@@ -65,7 +65,7 @@ def create_checkout():
                 app.logger.warning('Starting: %s' % f)
                 bot.act(answer_file=f)
             except Exception as e:
-                app.logger.warning(e)
+                app.logger.error(e)
     bot.end()
     return redirect('/user/%s' % request.form['username'])
 
