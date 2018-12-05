@@ -127,7 +127,12 @@ class Bot:
         driver.get(u)
         self.login(driver)
         sleep()
-        self.start_test(driver)
+        try:
+            self.start_test(driver)
+        except selenium.common.exceptions.TimeoutException as te:
+            self.save_assessment(answer_file, '<code>Unable to start_test(<a href="%s">%s</a>)</code>' % (u, u))
+            return
+
         sleep()
 
         try:
@@ -135,12 +140,12 @@ class Bot:
                 self.answering(driver, answers)
                 sleep()
         except selenium.common.exceptions.TimeoutException:
-            self.save_assessment(answer_file, driver)
+            text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
+            self.save_assessment(answer_file, text)
 
             print("done Answering")
 
-    def save_assessment(self, answer_file, driver):
-        text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
+    def save_assessment(self, answer_file, text):
         if self.username in Users.users:
             Users.users[self.username][answer_file] = text
         else:
