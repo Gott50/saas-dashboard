@@ -42,7 +42,7 @@ class Answers:
                 return self.new_answer(number, options, row)
             except IndexError as ie:
                 print(ie)
-                print("There are no new Answers for this Question: \n%s" % (row[0]))
+                print("There are no new Answers for this Question: \n%s" % (self.sheet[row][0]))
                 return options[0:number]
 
     def new_answer(self, number, options, row):
