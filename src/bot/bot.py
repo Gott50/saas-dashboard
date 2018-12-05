@@ -195,19 +195,23 @@ class Bot:
             print("skipped")
 
     def login(self, driver):
-        wait = WebDriverWait(driver, 20)
-        element = wait.until(EC.element_to_be_clickable((By.ID, 'i0116')))
-        (ActionChains(driver)
-         .move_to_element(element)
-         .click().send_keys(self.username).perform())
-        sleep(5)
-        driver.find_element_by_id("idSIButton9").click()
-        sleep(5)
-        element = wait.until(EC.element_to_be_clickable((By.ID, 'i0118')))
-        (ActionChains(driver)
-         .move_to_element(element)
-         .click().send_keys(self.password).perform())
-        driver.find_element_by_id("idSIButton9").click()
+        try:
+            wait = WebDriverWait(driver, 20)
+            element = wait.until(EC.element_to_be_clickable((By.ID, 'i0116')))
+            (ActionChains(driver)
+             .move_to_element(element)
+             .click().send_keys(self.username).perform())
+            sleep(5)
+            driver.find_element_by_id("idSIButton9").click()
+            sleep(5)
+            element = wait.until(EC.element_to_be_clickable((By.ID, 'i0118')))
+            (ActionChains(driver)
+             .move_to_element(element)
+             .click().send_keys(self.password).perform())
+            driver.find_element_by_id("idSIButton9").click()
+        except Exception as e:
+            print("Exception in login(): %s" % type(e))
+
         print("logged in")
 
     def end(self):
