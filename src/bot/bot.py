@@ -115,7 +115,11 @@ class Bot:
             desired_capabilities=DesiredCapabilities.CHROME)
 
         message = "Session started!"
-        self.print(self.username, message, "initialization", "info")
+
+        self.print(self.username)
+        self.print(message)
+        self.print("initialization")
+        self.print("info")
         self.print('')
 
         return self
