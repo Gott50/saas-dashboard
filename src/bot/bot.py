@@ -32,7 +32,8 @@ class Bot:
                  proxy_address=None,
                  proxy_chrome_extension=None,
                  proxy_port=0,
-                 ):
+                 print=print):
+        self.print = print
         self.password = password
         self.username = username
         self.browser = None
@@ -89,7 +90,7 @@ class Bot:
                                             desired_capabilities=capabilities,
                                             chrome_options=chrome_options)
         except selenium.common.exceptions.WebDriverException as exc:
-            print(exc)
+            self.print(exc)
             raise Exception('ensure chromedriver is installed at {}'.format(
                 Settings.chromedriver_location))
 
@@ -101,7 +102,7 @@ class Bot:
                 float(matches.groups()[0]), Settings.chromedriver_min_version))
 
         self.browser.implicitly_wait(self.page_delay)
-        print('Session started - %s'
+        self.print('Session started - %s'
               % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
         return self
@@ -114,8 +115,8 @@ class Bot:
             desired_capabilities=DesiredCapabilities.CHROME)
 
         message = "Session started!"
-        print(self.username, message, "initialization", "info")
-        print('')
+        self.print(self.username, message, "initialization", "info")
+        self.print('')
 
         return self
 
@@ -123,7 +124,7 @@ class Bot:
         driver = self.browser
         answers = Answers(answer_file)
         u = url or answers.url()
-        print("url: %s" % u)
+        self.print("url: %s" % u)
         driver.get(u)
         self.login(driver)
         sleep()
@@ -143,7 +144,7 @@ class Bot:
             text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
             self.save_assessment(answer_file, text)
 
-            print("done Answering")
+            self.print("done Answering")
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
@@ -163,8 +164,8 @@ class Bot:
             sleep()
             button_ok.click()
         except selenium.common.exceptions.TimeoutException:
-            print("no button_ok")
-        print("started Test")
+            self.print("no button_ok")
+        self.print("started Test")
 
     def answering(self, driver, answers):
         wait = WebDriverWait(driver, 20)
@@ -176,7 +177,7 @@ class Bot:
     def answer_question(self, answers, wait):
         question = wait.until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewPrompt > table > tbody > tr > td:nth-child(2)')))
-        print(question.text)
+        self.print(question.text)
         answers_parent = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#QuestionViewChoices')))
         test_answers = answers_parent.find_elements_by_css_selector("tr > td:nth-child(2)")
         options = []
@@ -190,9 +191,9 @@ class Bot:
                     test_answer.click()
                     if str(question.text) not in self.answered:
                         self.answered += [str(question.text)]
-            print("answered")
+            self.print("answered")
         else:
-            print("skipped")
+            self.print("skipped")
 
     def login(self, driver):
         try:
@@ -210,9 +211,9 @@ class Bot:
              .click().send_keys(self.password).perform())
             driver.find_element_by_id("idSIButton9").click()
         except Exception as e:
-            print("Exception in login(): %s" % type(e))
+            self.print("Exception in login(): %s" % type(e))
 
-        print("logged in")
+        self.print("logged in")
 
     def end(self):
         """Closes the current session"""
@@ -220,8 +221,8 @@ class Bot:
             self.browser.delete_all_cookies()
             self.browser.quit()
         except WebDriverException as exc:
-            print('Could not locate Chrome: {}'.format(exc))
+            self.print('Could not locate Chrome: {}'.format(exc))
 
-        print('Session ended - {}'.format(
+        self.print('Session ended - {}'.format(
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-        print('-' * 20 + '\n\n')
+        self.print('-' * 20 + '\n\n')

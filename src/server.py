@@ -74,7 +74,8 @@ def init_Bot():
     if os.environ.get('SELENIUM'):
         bot = Bot(username=request.form['username'],
                   password=request.form['password'],
-                  selenium_local_session=False)
+                  selenium_local_session=False,
+                  print=app.logger.warning)
         bot.set_selenium_remote_session(
             selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM', 'selenium'), 4444))
     else:
