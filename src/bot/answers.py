@@ -8,7 +8,9 @@ from .settings import Settings
 
 
 class Answers:
-    def __init__(self, answer_file):
+    def __init__(self, answer_file,
+                 print=print):
+        self.print = print
         self.location = os.path.join(Settings.assets_location, answer_file)
         self.wb = openpyxl.load_workbook(self.location)
         self.sheet = self.wb[self.wb.sheetnames[0]]
@@ -30,8 +32,8 @@ class Answers:
         size = len(wrong_answers)
         for i in range(number):
             offset = 3 + size * number
-            self.sheet[row][offset + i].value = answer[i]
-        print('saved new possible Answer: \n%s' % answer)
+            self.sheet[row][offset + i].value = answer[i]  # TODO catch end of File
+        self.print('saved new possible Answer: \n%s' % answer)
 
     def get_answer(self, row, options, number):
         answers = list(map(lambda c: c.value, self.sheet[row][2:]))
@@ -41,8 +43,8 @@ class Answers:
             try:
                 return self.new_answer(number, options, row)
             except IndexError as ie:
-                print(ie)
-                print("There are no new Answers for this Question: \n%s" % (self.sheet[row][0]))
+                self.print(ie)
+                self.print("There are no new Answers for this Question: \n%s" % (self.sheet[row][0]))
                 return options[0:number]
 
     def new_answer(self, number, options, row):
