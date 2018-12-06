@@ -23,9 +23,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk add --virtual .rundeps $runDeps \
     && apk del .build-deps
 
-COPY ./src/bot/ ./bot/
-COPY ./src/templates/ ./templates/
-COPY ./src/server.py ./server.py
+COPY ./src/ ./
 
 EXPOSE 5000
 CMD python server.py
