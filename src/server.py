@@ -97,8 +97,8 @@ def compose_user_view(user):
     view = render_template('user_prefix.html')
 
     for test in user:
-        view += '<h2>%s</h2>' % test
-        view += user[test].replace('style="display: none;"', '')
+        view += '<h1>%s</h1>' % test
+        view += user[test].replace('style="display: none;"', '').replace('style="height: 460px;"', '')
 
     return view
 
