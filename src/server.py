@@ -90,7 +90,7 @@ def show_user_profile(username):
     if username in Users.users:
         user = Users.users[username]
         return compose_user_view(user)
-    return "User not found: %s" % username
+    return render_template('user_not_found.html', username=username)
 
 
 def compose_user_view(user):
