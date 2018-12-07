@@ -1,0 +1,14 @@
+<!doctype html>
+<html class="no-js light_theme">
+<body>
+{% for user in users %}
+    <div>
+        <a href="/user/{{ user }}"><h1>{{ user }}</h1></a>
+        <ul>
+            {% for test in users[user] %}
+            <li><a href="/user/{{ user }}#{{ test }}">{{ test }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
+</body>

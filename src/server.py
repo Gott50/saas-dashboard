@@ -70,6 +70,11 @@ def create_checkout():
     return redirect('/user/%s' % request.form['username'])
 
 
+@app.route('/user', methods=['GET'])
+def list_user():
+    return render_template("user_list.html", users=Users.users)
+
+
 def init_Bot():
     if os.environ.get('SELENIUM'):
         bot = Bot(username=request.form['username'],
@@ -97,7 +102,7 @@ def compose_user_view(user):
     view = render_template('user_prefix.html')
 
     for test in user:
-        view += '<h1>%s</h1>' % test
+        view += '<h1 id="%s">%s</h1>' % (test, test)
         view += user[test].replace('style="display: none;"', '').replace('style="height: 460px;"', '')
 
     return view
