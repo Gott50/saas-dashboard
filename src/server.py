@@ -31,7 +31,9 @@ def allowed_file(filename):
 
 
 def list_uploads():
-    return os.listdir(UPLOAD_FOLDER)
+    uploads = os.listdir(UPLOAD_FOLDER)[:]
+    uploads.sort()
+    return uploads
 
 
 @app.route('/', methods=['GET', 'POST'])
