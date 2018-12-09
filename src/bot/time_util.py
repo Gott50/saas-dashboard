@@ -31,7 +31,7 @@ def set_sleep_percentage(percentage):
 
 
 
-def sleep(t=15, custom_percentage=None):
+def sleep(t=2, custom_percentage=None):
     if custom_percentage is None:
         custom_percentage = sleep_percentage
     time = randomize_time(t)*custom_percentage
