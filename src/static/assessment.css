@@ -30,3 +30,27 @@
     float: left;
     margin-top: 2px;
 }
+
+.ResultsRadioOn {
+    background-image: url(./images/radiobutton_on.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    padding-left: 15px;
+    padding-right: 13px;
+    text-indent: 1.5em;
+    min-height: 19px;
+    float: left;
+    margin-top: 2px;
+}
+
+.ResultsRadioOff {
+    background-image: url(./images/radiobutton_off.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    padding-left: 15px;
+    padding-right: 13px;
+    text-indent: 1.5em;
+    min-height: 19px;
+    float: left;
+    margin-top: 2px;
+}
