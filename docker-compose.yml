@@ -21,6 +21,16 @@ services:
     ports:
     - "4444:4444"
 
+  worker:
+    build: ./worker
+    image: gott50/saas-bot
+    command: python manage.py run_worker
+    volumes:
+      - ./worker:/usr/src/app
+    environment:
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+    depends_on:
+      - redis
   redis:
     image: redis:4.0.11-alpine
   dashboard:
