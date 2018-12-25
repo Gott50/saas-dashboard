@@ -75,8 +75,13 @@ def create_checkout():
                 job = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
                                       job_id="%s: %s" % (request.form['username'], f))
                 job_ids += [job.get_id()]
-    return redirect('/user/%s' % request.form['username'])
-
+    response_object = {
+        'status': 'success',
+        'data': {
+            'job_ids': job_ids
+        }
+    }
+    return jsonify(response_object), 202
 
 @app.route('/user', methods=['GET'])
 def list_user():

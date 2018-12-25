@@ -12,10 +12,10 @@ function submit() {
     method: 'POST'
   })
       .done((res) => {
-        getStatus(res.data.task_id)
+        res.data.job_ids.map(getStatus)
       })
       .fail((err) => {
-        console.log(err)
+        console.error(err)
       });
 };
 
