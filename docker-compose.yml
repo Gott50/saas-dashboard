@@ -20,3 +20,13 @@ services:
     shm_size: 128M
     ports:
     - "4444:4444"
+
+  redis:
+    image: redis:4.0.11-alpine
+  dashboard:
+    build: ./dashboard
+    image: dashboard
+    container_name: dashboard
+    ports:
+      - '9181:9181'
+    command: rq-dashboard -H redis
