@@ -1,6 +1,6 @@
 version: '3'
 services:
-  ui:
+  bot:
     build: .
     image: gott50/saas-bot
     volumes:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - redis
       - selenium
-      - ui
+      - bot
   redis:
     image: redis:4.0.11-alpine
   dashboard:
