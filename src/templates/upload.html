@@ -1,5 +1,5 @@
 <!doctype html>
-<form method="post" action="/user">
+<form>
     <div>
         <label for="username">Username:
             <input type="text" name="username" required>
@@ -16,8 +16,8 @@
                 <input type="checkbox" name="{{ item }}">{{ item }}</label>
         </div>
     {% endfor %}
-    <input type=submit value=Start>
 </form>
+<button onclick='submit()' value=Start>Start</button>
 
 
 <h3>Upload new File</h3>
@@ -25,3 +25,7 @@
     <p><input type=file name=file required>
         <input type=submit value=Upload>
 </form>
+
+<!-- scripts -->
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script>
