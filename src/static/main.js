@@ -19,24 +19,24 @@ function submit() {
       });
 };
 
-function getStatus(taskID) {
+function getStatus(jobID) {
   $.ajax({
-    url: `/tasks/${taskID}`,
+    url: `/jobs/${jobID}`,
     method: 'GET'
   })
   .done((res) => {
     const html = `
       <tr>
-        <td>${res.data.task_id}</td>
-        <td>${res.data.task_status}</td>
-        <td>${res.data.task_result}</td>
+        <td>${res.data.job_id}</td>
+        <td>${res.data.job_status}</td>
+        <td>${res.data.job_result}</td>
       </tr>`
     $('#tasks').prepend(html);
-    const taskStatus = res.data.task_status;
+    const taskStatus = res.data.job_status;
     if (taskStatus === 'finished' || taskStatus === 'failed') return false;
-    setTimeout(function() {
-      getStatus(res.data.task_id);
-    }, 1000);
+    // setTimeout(function() {
+    //   getStatus(jobID);
+    // }, 1000);
   })
   .fail((err) => {
     console.log(err)

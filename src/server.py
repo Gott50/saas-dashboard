@@ -83,6 +83,26 @@ def create_checkout():
     }
     return jsonify(response_object), 202
 
+
+@app.route('/jobs/<job_id>', methods=['GET'])
+def get_status(job_id):
+    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+        q = Queue()
+        job = q.fetch_job(job_id)
+    if job:
+        response_object = {
+            'status': 'success',
+            'data': {
+                'job_id': job.get_id(),
+                'job_status': job.get_status(),
+                'job_result': job.result,
+            }
+        }
+    else:
+        response_object = {'status': 'error'}
+    return jsonify(response_object)
+
+
 @app.route('/user', methods=['GET'])
 def list_user():
     return render_template("user_list.html", users=Users.users)
