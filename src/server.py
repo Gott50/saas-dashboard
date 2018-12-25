@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, redirect, flash, render_template
 from werkzeug.utils import secure_filename
 
-from bot import Bot
+from bot.config import BaseConfig
 from bot.settings import Settings
 from bot.users import Users
 
@@ -12,6 +12,7 @@ Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
 app = Flask(__name__)
+app.config.from_object(BaseConfig)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
