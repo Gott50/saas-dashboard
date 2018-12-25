@@ -30,6 +30,7 @@ function getStatus(jobID) {
         <td>${res.data.job_id}</td>
         <td>${res.data.job_status}</td>
         <td>${res.data.job_result}</td>
+        <td>${JSON.stringify(res.data.job_meta)}</td>
       </tr>`
     $('#tasks').prepend(html);
     const taskStatus = res.data.job_status;

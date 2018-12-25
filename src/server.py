@@ -96,6 +96,7 @@ def get_status(job_id):
                 'job_id': job.get_id(),
                 'job_status': job.get_status(),
                 'job_result': job.result,
+                'job_meta': job.meta,
             }
         }
     else:
