@@ -6,7 +6,7 @@ def create_task(username, password, answer_file):
     bot = init_Bot(username=username, password=password)
     try:
         print('Starting: %s' % answer_file)
-        bot.act(answer_file=answer_file)
+        result = bot.act(answer_file=answer_file)
     except Exception as e:
         print(e)
         try:
@@ -15,7 +15,7 @@ def create_task(username, password, answer_file):
             print(e2)
         return e
     bot.end()
-    return True
+    return result
 
 
 def init_Bot(username, password, print=print):
