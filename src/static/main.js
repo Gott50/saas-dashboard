@@ -1,7 +1,20 @@
 // custom javascript
 
+var watch_job_ids = [];
+
+function add_watcher(job_ids) {
+    watch_job_ids = [...watch_job_ids, ...job_ids]
+}
+
+function startWatcher() {
+    document.getElementById('tasks').innerHTML = '';
+    watch_job_ids.map(getStatus);
+    setTimeout(startWatcher, 1000);
+}
+
 $(document).ready(() => {
-    console.log('Sanity Check!');
+    console.log('startWatcher()');
+    startWatcher()
 });
 
 function submit() {
@@ -11,7 +24,7 @@ function submit() {
         data: $('form').serialize(),
         method: 'POST'
     })
-        .done(res => res.data.job_ids.map(getStatus))
+        .done(res => add_watcher(res.data.job_ids))
         .fail((err) => {
             console.error(err)
         });
@@ -35,6 +48,6 @@ function getStatus(jobID) {
             if (taskStatus === 'finished' || taskStatus === 'failed') return false;
         })
         .fail((err) => {
-            console.log(err)
+            console.error(err)
         });
 }
