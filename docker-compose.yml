@@ -1,6 +1,6 @@
 version: '3'
 services:
-  bot:
+  ui:
     build: .
     image: gott50/saas-bot
     volumes:
@@ -22,21 +22,26 @@ services:
     - "4444:4444"
 
   worker:
-    build: ./worker
     image: gott50/saas-bot
     command: python manage.py run_worker
     volumes:
-      - ./worker:/usr/src/app
+      - ./src/uploads:/app/uploads
+      - ./src/bot:/app/bot
+    links:
+      - selenium:selenium
     environment:
-      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - UPLOAD_FOLDER=./uploads
+      - SELENIUM=selenium
+      - APP_SETTINGS=bot.config.DevelopmentConfig
     depends_on:
       - redis
+      - selenium
+      - ui
   redis:
     image: redis:4.0.11-alpine
   dashboard:
     build: ./dashboard
     image: dashboard
-    container_name: dashboard
     ports:
       - '9181:9181'
     command: rq-dashboard -H redis

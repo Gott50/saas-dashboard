@@ -7,6 +7,13 @@ from bot.config import BaseConfig
 from bot.settings import Settings
 from bot.users import Users
 
+import redis
+from rq import Queue, Connection
+from flask import render_template, jsonify, \
+    request, current_app
+
+from bot.tasks import create_task
+
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
@@ -60,37 +67,20 @@ def upload_file():
 
 @app.route('/user', methods=['POST'])
 def create_checkout():
-    bot = init_Bot()
-
+    task_ids = []
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
-            try:
-                app.logger.warning('Starting: %s' % f)
-                bot.act(answer_file=f)
-            except Exception as e:
-                app.logger.error(e)
-    bot.end()
+            with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+                q = Queue()
+                task = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
+                                      job_id="%s: %s" % (request.form['username'], f))
+                task_ids += [task.get_id()]
     return redirect('/user/%s' % request.form['username'])
 
 
 @app.route('/user', methods=['GET'])
 def list_user():
     return render_template("user_list.html", users=Users.users)
-
-
-def init_Bot():
-    if os.environ.get('SELENIUM'):
-        bot = Bot(username=request.form['username'],
-                  password=request.form['password'],
-                  selenium_local_session=False,
-                  print=app.logger.warning)
-        bot.set_selenium_remote_session(
-            selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM', 'selenium'), 4444))
-    else:
-        bot = Bot(username=request.form['username'],
-                  password=request.form['password'],
-                  selenium_local_session=True)
-    return bot
 
 
 @app.route('/user/<username>', methods=['GET'])
