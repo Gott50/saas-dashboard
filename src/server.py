@@ -67,14 +67,14 @@ def upload_file():
 
 @app.route('/user', methods=['POST'])
 def create_checkout():
-    task_ids = []
+    job_ids = []
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
             with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                 q = Queue()
-                task = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
+                job = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
                                       job_id="%s: %s" % (request.form['username'], f))
-                task_ids += [task.get_id()]
+                job_ids += [job.get_id()]
     return redirect('/user/%s' % request.form['username'])
 
 
