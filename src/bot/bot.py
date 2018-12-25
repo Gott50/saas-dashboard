@@ -20,6 +20,7 @@ from bot.users import Users
 from .settings import Settings
 from .answers import Answers
 
+from rq import get_current_job
 
 class Bot:
 
@@ -149,6 +150,7 @@ class Bot:
             self.save_assessment(answer_file, text)
 
             self.print("done Answering")
+            return Users.users[self.username]
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
@@ -188,6 +190,7 @@ class Bot:
         for test_answer in test_answers:
             options += [test_answer.text]
         a = list(map(lambda e: str(e).replace(" ", ""), answers.get(question=question.text, options=options)))
+        self.update_job_meta_question(question.text)
         if str(question.text) not in self.answered:
             for test_answer in test_answers:
                 if str(test_answer.text).replace(" ", "") in a:
@@ -230,3 +233,8 @@ class Bot:
         self.print('Session ended - {}'.format(
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         self.print('-' * 20 + '\n\n')
+
+    def update_job_meta_question(self, question: str):
+        job = get_current_job()
+        job.meta['question'] = question
+        job.save_meta()
