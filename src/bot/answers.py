@@ -30,9 +30,12 @@ class Answers:
         number = self.sheet['B%s' % row].value
         wrong_answers = self.wrong_answers(row, number)
         size = len(wrong_answers)
-        for i in range(number):
-            offset = 3 + size * number
-            self.sheet[row][offset + i].value = answer[i]  # TODO catch end of File
+        try:
+            for i in range(number):
+                offset = 3 + size * number
+                self.sheet[row][offset + i].value = answer[i]
+        except Exception as e:
+            self.print("possible Exception caused by end of File: %s" % e)
         self.print('saved new possible Answer: \n%s' % answer)
 
     def get_answer(self, row, options, number):
