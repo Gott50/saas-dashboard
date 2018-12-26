@@ -3,7 +3,7 @@
 var watch_job_ids = [];
 
 function add_watcher(job_ids) {
-    watch_job_ids = [...watch_job_ids, ...job_ids]
+    watch_job_ids = [...watch_job_ids, ...job_ids.filter(j=> !watch_job_ids.includes(j))]
 }
 
 function startWatcher() {
