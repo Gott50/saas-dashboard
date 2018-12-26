@@ -150,7 +150,7 @@ class Bot:
             self.save_assessment(answer_file, text)
 
             self.print("done Answering")
-            return Users.users[self.username]
+            return text
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
