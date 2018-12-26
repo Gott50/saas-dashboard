@@ -3,6 +3,7 @@ import os
 import random
 
 import openpyxl
+from rq import get_current_job
 
 from .settings import Settings
 
@@ -37,6 +38,15 @@ class Answers:
         except Exception as e:
             self.print("possible Exception caused by end of File: %s" % e)
         self.print('saved new possible Answer: \n%s' % answer)
+        self.update_job_meta_new_question(self.sheet['A%s' % row].value)
+
+    def update_job_meta_new_question(self, question: str):
+        try:
+            job = get_current_job()
+            job.meta['new_question'] = question
+            job.save_meta()
+        except Exception as e:
+            self.print(e)
 
     def get_answer(self, row, options, number):
         answers = list(map(lambda c: c.value, self.sheet[row][2:]))
