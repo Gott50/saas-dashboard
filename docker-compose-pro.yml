@@ -19,5 +19,28 @@ services:
       - 4444:4444
     shm_size: 128M
 
+  worker:
+    image: gott50/saas-bot
+    command: python manage.py run_worker
+    volumes:
+      - uploads_data:/app/uploads
+    links:
+      - selenium:selenium
+    environment:
+      - UPLOAD_FOLDER=/app/uploads
+      - SELENIUM=selenium
+      - APP_SETTINGS=bot.config.DevelopmentConfig
+    depends_on:
+      - redis
+      - selenium
+      - bot
+  redis:
+    image: redis:4.0.11-alpine
+  dashboard:
+    image: gott50/rq-dashboard
+    ports:
+      - '9181:9181'
+    command: rq-dashboard -H redis
+
 volumes:
   uploads_data:
