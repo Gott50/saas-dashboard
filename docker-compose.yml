@@ -41,7 +41,7 @@ services:
     image: redis:4.0.11-alpine
   dashboard:
     build: ./dashboard
-    image: dashboard
+    image: gott50/rq-dashboard
     ports:
       - '9181:9181'
     command: rq-dashboard -H redis
