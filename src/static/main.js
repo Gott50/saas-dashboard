@@ -28,7 +28,7 @@ function requestJobsStatus(watch_job_ids, callback) {
 
 function started(res) {
     res.data.jobs.filter(job => job.job_status === 'started').forEach(getStarted);
-
+    res.data.jobs.filter(job => job.job_status === 'finished').forEach(getFinished);
 }
 
 $(document).ready(() => {
@@ -60,6 +60,11 @@ function getStartedHTML(job) {
 function getStarted(job) {
     const html = getStartedHTML(job)
     document.getElementById('started').innerHTML = html;
+}
+
+function getFinished(job) {
+    watch_job_ids = watch_job_ids.filter(id => id !== job.job_id);
+    $('#finished').prepend(getStartedHTML(job));
 }
 
 function getDefaultHTML(job) {

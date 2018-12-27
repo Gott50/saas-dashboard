@@ -1,4 +1,8 @@
 <!doctype html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assessment.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='hide.css') }}" type="text/css">
+</head>
 <form>
     <div>
         <label for="username">Username:
@@ -48,6 +52,13 @@
         <tbody id="tasks">
         </tbody>
     </table>
+</div>
+
+<div>
+    <h1>Finished Tasks</h1>
+    <div id="finished">
+
+    </div>
 </div>
 
 <!-- scripts -->
