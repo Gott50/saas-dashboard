@@ -235,6 +235,9 @@ class Bot:
         self.print('-' * 20 + '\n\n')
 
     def update_job_meta_question(self, question: str):
-        job = get_current_job()
-        job.meta['question'] = question
-        job.save_meta()
+        try:
+            job = get_current_job()
+            job.meta['question'] = question
+            job.save_meta()
+        except Exception as e:
+            self.print(e)
