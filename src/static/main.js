@@ -7,8 +7,7 @@ function add_watcher(job_ids) {
 }
 
 function startWatcher() {
-    document.getElementById('tasks').innerHTML = '';
-    watch_job_ids.map(getStatus);
+    getQueue();
     setTimeout(startWatcher, 1000);
 }
 
@@ -39,30 +38,24 @@ function getStarted(res) {
     document.getElementById('started').innerHTML = html;
 }
 
-function getDefault(res) {
-    const html = `
+function getDefaultHTML(job) {
+    return `
       <tr>
-        <td>${res.data.job_id}</td>
-        <td>${res.data.job_status}</td>
-        <td>${res.data.job_result}</td>
-        <td>${JSON.stringify(res.data.job_meta)}</td>
-      </tr>`
-    $('#tasks').prepend(html);
+        <td>${job.job_id}</td>
+        <td>${job.job_status}</td>
+        <td>${job.job_result}</td>
+        <td>${JSON.stringify(job.job_meta)}</td>
+      </tr>`;
 }
 
-function getStatus(jobID) {
+function getQueue() {
     $.ajax({
-        url: `/jobs/${jobID}`,
+        url: `/jobs`,
         method: 'GET'
     })
         .done((res) => {
-            switch (res.data.job_status) {
-                case 'started':
-                    getStarted(res);
-                    break;
-                default:
-                    getDefault(res);
-            }
+            const html = res.data.jobs.map(getDefaultHTML);
+            document.getElementById('tasks').innerHTML = html;
         })
         .fail((err) => {
             console.error(err)
