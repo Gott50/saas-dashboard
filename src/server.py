@@ -73,7 +73,7 @@ def create_checkout():
             with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                 q = Queue()
                 job = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
-                                      job_id="%s: %s" % (request.form['username'], f))
+                                     job_id="%s: %s" % (request.form['username'], f))
                 job_ids += [job.get_id()]
     response_object = {
         'status': 'success',
@@ -119,9 +119,35 @@ def get_jobs_status():
     })
 
 
+@app.route('/jobs', methods=['GET'])
+def get_jobs():
+    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+        q = Queue()
+        jobs = q.jobs
+    if jobs:
+        response_object = {
+            'status': 'success',
+            'data': {
+                'jobs': list(map(lambda job: get_job_data(job), jobs))
+            }
+        }
+    else:
+        response_object = {'status': 'error'}
+    return jsonify(response_object)
+
+
+def get_job_data(job):
+    return {
+        'job_id': job.get_id(),
+        'job_status': job.get_status(),
+        'job_result': job.result,
+        'job_meta': job.meta,
+    }
+
+
 @app.route('/user', methods=['GET'])
 def list_user():
-    return render_template("user_list.html", users=Users.users)@app.route('/user', methods=['GET'])
+    return render_template("user_list.html", users=Users.users) @ app.route('/user', methods=['GET'])
 
 
 @app.route('/user', methods=['POST'])
