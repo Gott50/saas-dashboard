@@ -83,7 +83,7 @@ function getQueue() {
         method: 'GET'
     })
         .done((res) => {
-            const html = res.data.jobs.map(getDefaultHTML);
+            const html = res.data.jobs.map(getDefaultHTML).join("");
             document.getElementById('tasks').innerHTML = html;
         })
         .fail((err) => {
