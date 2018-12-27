@@ -92,12 +92,7 @@ def get_status(job_id):
     if job:
         response_object = {
             'status': 'success',
-            'data': {
-                'job_id': job.get_id(),
-                'job_status': job.get_status(),
-                'job_result': job.result,
-                'job_meta': job.meta,
-            }
+            'data': get_job_data(job)
         }
     else:
         response_object = {'status': 'error'}
@@ -106,6 +101,11 @@ def get_status(job_id):
 
 @app.route('/user', methods=['GET'])
 def list_user():
+    return render_template("user_list.html", users=Users.users)@app.route('/user', methods=['GET'])
+
+
+@app.route('/user', methods=['POST'])
+def upload_user():
     return render_template("user_list.html", users=Users.users)
 
 
