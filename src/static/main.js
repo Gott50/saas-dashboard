@@ -51,8 +51,8 @@ function submit() {
 
 function getStartedHTML(job) {
     return `
-        <div>${job.job_id}</div>
-        <div>${JSON.stringify(job.job_meta)}</div>
+        <h2>${job.job_id}</h2>
+        <code>${JSON.stringify(job.job_meta)}</code>
         <div>${job.job_result}</div>
       `;
 }
