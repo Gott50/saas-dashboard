@@ -17,10 +17,11 @@
     {% for item in uploads %}
         <div>
             <label for="{{ item }}">
-                <input type="checkbox" name="{{ item }}">{{ item }}</label>
+                <input class="checkbox" type="checkbox" name="{{ item }}">{{ item }}</label>
         </div>
     {% endfor %}
 </form>
+<button onclick='selectAll()'>Select All</button>
 <button onclick='submit()' value=Start>Start</button>
 
 

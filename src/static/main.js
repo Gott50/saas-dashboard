@@ -90,3 +90,9 @@ function getQueue() {
             console.error(err)
         });
 }
+
+function selectAll() {
+    checkboxes = document.getElementsByClassName("checkbox");
+    for (var checkbox in checkboxes)
+        checkbox.checked = true;
+}
