@@ -30,6 +30,15 @@ function submit() {
         });
 };
 
+function getStarted(res) {
+    const html = `
+        <div>${res.data.job_id}</div>
+        <div>${JSON.stringify(res.data.job_meta)}</div>
+        <div>${res.data.job_result}</div>
+      `
+    document.getElementById('started').innerHTML = html;
+}
+
 function getDefault(res) {
     const html = `
       <tr>
@@ -48,6 +57,9 @@ function getStatus(jobID) {
     })
         .done((res) => {
             switch (res.data.job_status) {
+                case 'started':
+                    getStarted(res);
+                    break;
                 default:
                     getDefault(res);
             }
