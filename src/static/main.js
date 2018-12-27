@@ -7,6 +7,7 @@ function add_watcher(job_ids) {
 }
 
 function startWatcher() {
+    watch_job_ids.map(getStarted)
     getQueue();
     setTimeout(startWatcher, 1000);
 }
@@ -29,13 +30,27 @@ function submit() {
         });
 };
 
-function getStarted(res) {
-    const html = `
-        <div>${res.data.job_id}</div>
-        <div>${JSON.stringify(res.data.job_meta)}</div>
-        <div>${res.data.job_result}</div>
-      `
-    document.getElementById('started').innerHTML = html;
+function getStartedHTML(job) {
+    return `
+        <div>${job.job_id}</div>
+        <div>${JSON.stringify(job.job_meta)}</div>
+        <div>${job.job_result}</div>
+      `;
+}
+
+function getStarted(job_id) {
+    $.ajax({
+        url: `/jobs/${job_id}`,
+        method: 'GET'
+    })
+        .done((res) => {
+            if (res.data.job_status !== 'started') return false;
+            const html = getStartedHTML(res.data)
+            document.getElementById('started').innerHTML = html;
+        })
+        .fail((err) => {
+            console.error(err)
+        });
 }
 
 function getDefaultHTML(job) {
