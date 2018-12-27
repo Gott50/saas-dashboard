@@ -1,4 +1,5 @@
 import os
+
 from bot import Bot
 
 
@@ -15,7 +16,7 @@ def create_task(username, password, answer_file):
             print(e2)
         return e
     bot.end()
-    return result
+    return result.replace('style="display: none;"', '').replace('style="height: 460px;"', '')
 
 
 def init_Bot(username, password, print=print):
