@@ -33,7 +33,9 @@ class Bot:
                  proxy_address=None,
                  proxy_chrome_extension=None,
                  proxy_port=0,
-                 print=print):
+                 print=print,
+                 sleep_time=2):
+        self.sleep_time = sleep_time
         self.print = print
         self.password = password
         self.username = username
@@ -132,19 +134,19 @@ class Bot:
         self.print("url: %s" % u)
         driver.get(u)
         self.login(driver)
-        sleep()
+        sleep(self.sleep_time)
         try:
             self.start_test(driver)
         except selenium.common.exceptions.TimeoutException as te:
             self.save_assessment(answer_file, '<code>Unable to start_test(<a href="%s">%s</a>)</code>' % (u, u))
             return
 
-        sleep()
+        sleep(self.sleep_time)
 
         try:
             while True:
                 self.answering(driver, answers)
-                sleep()
+                sleep(self.sleep_time)
         except selenium.common.exceptions.TimeoutException:
             text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
             self.save_assessment(answer_file, text)
@@ -167,7 +169,7 @@ class Bot:
 
         try:
             button_ok = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#IntroBeginButton')))
-            sleep()
+            sleep(self.sleep_time)
             button_ok.click()
         except selenium.common.exceptions.TimeoutException:
             self.print("no button_ok")
@@ -177,7 +179,7 @@ class Bot:
         wait = WebDriverWait(driver, 20)
         button_next = wait.until(EC.element_to_be_clickable((By.ID, 'AssessmentNextButton')))
         self.answer_question(answers, wait)
-        sleep()
+        sleep(self.sleep_time)
         button_next.click()
 
     def answer_question(self, answers, wait):
@@ -194,7 +196,7 @@ class Bot:
         if str(question.text) not in self.answered:
             for test_answer in test_answers:
                 if str(test_answer.text).replace(" ", "") in a:
-                    sleep()
+                    sleep(self.sleep_time)
                     test_answer.click()
                     if str(question.text) not in self.answered:
                         self.answered += [str(question.text)]

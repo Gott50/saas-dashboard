@@ -72,7 +72,8 @@ def create_checkout():
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
             with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                 q = Queue()
-                job = q.enqueue_call(func=create_task, args=(request.form['username'], request.form['password'], f,),
+                job = q.enqueue_call(func=create_task, args=(
+                request.form['username'], request.form['password'], f, request.form["sleep"]),
                                      job_id="%s: %s" % (request.form['username'], f))
                 job_ids += [job.get_id()]
     response_object = {
