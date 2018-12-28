@@ -24,7 +24,7 @@ def init_Bot(username, password, sleep, print=print):
               password=password,
               selenium_local_session=False,
               print=print,
-              sleep=sleep)
+              sleep_time=sleep)
     bot.set_selenium_remote_session(
         selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM', 'selenium'), 4444))
     return bot
