@@ -9,7 +9,7 @@ function add_watcher(job_ids) {
 function startWatcher() {
     requestJobsStatus(watch_job_ids, started);
     getQueue();
-    setTimeout(startWatcher, 1000);
+    setTimeout(startWatcher, 10000);
 }
 
 function requestJobsStatus(watch_job_ids, callback) {
