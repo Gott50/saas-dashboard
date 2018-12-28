@@ -93,6 +93,7 @@ function getQueue() {
 
 function selectAll() {
     checkboxes = document.getElementsByClassName("checkbox");
-    for (var checkbox in checkboxes)
-        checkbox.checked = true;
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = true;
+    }
 }
