@@ -1,18 +1,16 @@
 import os
 
-from flask import Flask, request, redirect, flash, render_template
+import redis
+from flask import Flask, redirect, flash
+from flask import render_template, jsonify, \
+    request, current_app
+from rq import Queue, Connection
 from werkzeug.utils import secure_filename
 
 from bot.config import BaseConfig
 from bot.settings import Settings
-from bot.users import Users
-
-import redis
-from rq import Queue, Connection
-from flask import render_template, jsonify, \
-    request, current_app
-
 from bot.tasks import create_task
+from bot.users import Users
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 Settings.assets_location = UPLOAD_FOLDER
