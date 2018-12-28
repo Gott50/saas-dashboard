@@ -110,13 +110,14 @@ def get_jobs_status():
             jobs += [get_job_data(job)]
         else:
             return jsonify({'status': 'error'})
-
-    return jsonify({
+    result = {
         'status': 'success',
         'data': {
             'jobs': jobs
         }
-    })
+    }
+    app.logger.debug("get_jobs_status() return: %s" % result)
+    return jsonify(result)
 
 
 @app.route('/jobs', methods=['GET'])
