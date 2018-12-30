@@ -43,7 +43,9 @@ class Answers:
     def update_job_meta_new_question(self, question: str):
         try:
             job = get_current_job()
-            job.meta['new_question'] = question
+            if not job.meta['new_questions']:
+                job.meta['new_questions'] = []
+            job.meta['new_questions'] += [question]
             job.save_meta()
         except Exception as e:
             self.print(e)
