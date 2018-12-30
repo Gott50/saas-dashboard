@@ -65,6 +65,7 @@ function getStartedHTML(job) {
         <h2>${job.job_id}</h2>
         ${question}
         ${new_questions}
+        <h3>Result:</h3>
         <div>${job.job_result}</div>
       `;
 }
