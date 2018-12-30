@@ -38,9 +38,8 @@ class Answers:
         except Exception as e:
             self.print("possible Exception caused by end of File: %s" % e)
         self.print('saved new possible Answer: \n%s' % answer)
-        self.update_job_meta_new_question(self.sheet['A%s' % row].value)
 
-    def update_job_meta_new_question(self, question: str):
+    def add_job_meta_new_question(self, question: str):
         try:
             job = get_current_job()
             if not job.meta['new_questions']:
@@ -80,6 +79,8 @@ class Answers:
         return list(filter(lambda a: a[0], self.array_split(answers, number)))
 
     def new_entry(self, question, options):
+        self.add_job_meta_new_question(question)
+
         number = self.extract_number(question)
         if number == 0:
             answer = options
