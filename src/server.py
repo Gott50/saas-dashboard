@@ -129,7 +129,6 @@ def get_jobs_status():
         app.logger.error("result: %s" % result)
 
 
-
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
     with Connection(redis.from_url(current_app.config['REDIS_URL'])):
@@ -158,12 +157,12 @@ def get_job_data(job):
 
 @app.route('/user', methods=['GET'])
 def list_user():
-    return render_template("user_list.html", users=Users.users) @ app.route('/user', methods=['GET'])
+    return render_template("user_list.html", users=Users.users)
 
 
 @app.route('/user', methods=['POST'])
 def upload_user():
-    return render_template("user_list.html", users=Users.users)
+    return "Not Implemented", 501
 
 
 @app.route('/user/<username>', methods=['GET'])
