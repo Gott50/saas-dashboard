@@ -71,7 +71,7 @@ def create_checkout():
             with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                 q = Queue()
                 job = q.enqueue_call(func=create_task, args=(
-                request.form['username'], request.form['password'], f, request.form["sleep"]),
+                    request.form['username'], request.form['password'], f, (pars_sleep())),
                                      job_id="%s: %s" % (request.form['username'], f))
                 job_ids += [job.get_id()]
     response_object = {
@@ -81,6 +81,13 @@ def create_checkout():
         }
     }
     return jsonify(response_object), 202
+
+
+def pars_sleep():
+    try:
+        return int(request.form["sleep"])
+    except ValueError:
+        return None
 
 
 @app.route('/jobs/<job_id>', methods=['GET'])
