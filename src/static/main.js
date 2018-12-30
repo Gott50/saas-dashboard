@@ -50,9 +50,21 @@ function submit() {
 };
 
 function getStartedHTML(job) {
+    var question = '';
+    var new_questions = '';
+    if (job.job_meta) {
+        if (job.job_meta.question) {
+            question = `<h3>Question:</h3><code>${job.job_meta.question}</code>`
+        }
+        if (job.job_meta.new_questions) {
+            new_questions = `<h3>New Questions:</h3>`
+                + job.job_meta.new_questions.map(q => `<code>${q}<code/>`)
+        }
+    }
     return `
         <h2>${job.job_id}</h2>
-        <code>${JSON.stringify(job.job_meta)}</code>
+        ${question}
+        ${new_questions}
         <div>${job.job_result}</div>
       `;
 }
