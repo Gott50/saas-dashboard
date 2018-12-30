@@ -115,8 +115,12 @@ def get_jobs_status():
             'jobs': jobs
         }
     }
-    app.logger.debug("get_jobs_status() return: %s" % result)
-    return jsonify(result)
+    try:
+        return jsonify(result)
+    except Exception as e:
+        app.logger.error("Exception at get_jobs_status(): %s" % e)
+        app.logger.error("result: %s" % result)
+
 
 
 @app.route('/jobs', methods=['GET'])
