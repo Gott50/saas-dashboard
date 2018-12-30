@@ -16,8 +16,11 @@ def create_task(username, password, answer_file, sleep=2):
             print(e2)
         return e
     bot.end()
-    return result.replace('style="display: none;"', '').replace('style="height: 460px;"', '')
 
+    if type(result) == str:
+        return result.replace('style="display: none;"', '').replace('style="height: 460px;"', '')
+    else:
+        return result
 
 def init_Bot(username, password, sleep, print=print):
     bot = Bot(username=username,
