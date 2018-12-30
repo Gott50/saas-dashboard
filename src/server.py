@@ -62,6 +62,14 @@ def upload_file():
             return "uploaded %s" % filename
     return render_template('upload.html', uploads=list_uploads())
 
+@app.route('/delete', methods=['GET', 'POST'])
+def delete_file():
+    if request.method == 'POST':
+        for f in request.form:
+            if request.form[f] == 'on':
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], f))
+    return render_template('delete.html', uploads=list_uploads())
+
 
 @app.route('/user', methods=['POST'])
 def create_checkout():

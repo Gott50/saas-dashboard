@@ -1,0 +1,15 @@
+<!doctype html>
+<form method="post" action="/delete">
+    {% for item in uploads %}
+        <div>
+            <label for="{{ item }}">
+                <input class="checkbox" type="checkbox" name="{{ item }}">{{ item }}</label>
+        </div>
+    {% endfor %}
+    <input type='submit' value=Delete>
+</form>
+<button onclick='selectAll()'>Select All</button>
+
+<!-- scripts -->
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script>
