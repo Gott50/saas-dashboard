@@ -23,11 +23,19 @@ def create_task(username, password, answer_file, sleep=2):
         return result
 
 def init_Bot(username, password, sleep, print=print):
-    bot = Bot(username=username,
-              password=password,
-              selenium_local_session=False,
-              print=print,
-              sleep_time=sleep)
-    bot.set_selenium_remote_session(
-        selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM', 'selenium'), 4444))
+    print("SELENIUM: %s" % os.environ.get('SELENIUM'))
+    if os.environ.get('SELENIUM'):
+        bot = Bot(username=username,
+                  password=password,
+                  selenium_local_session=False,
+                  print=print,
+                  sleep_time=sleep)
+        bot.set_selenium_remote_session(
+            selenium_url="http://%s:%d/wd/hub" % (os.environ.get('SELENIUM','selenium'), 4444))
+    else:
+        bot = Bot(username=username,
+                  password=password,
+                  selenium_local_session=True,
+                  print=print,
+                  sleep_time=sleep)
     return bot
