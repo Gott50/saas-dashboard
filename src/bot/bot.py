@@ -22,6 +22,7 @@ from .answers import Answers
 
 from rq import get_current_job
 
+
 class Bot:
 
     def __init__(self,
@@ -106,7 +107,7 @@ class Bot:
 
         self.browser.implicitly_wait(self.page_delay)
         self.print('Session started - %s'
-              % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+                   % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
         return self
 
