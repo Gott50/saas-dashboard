@@ -119,7 +119,6 @@ def get_status(job_id):
 
 @app.route('/jobs/status', methods=['POST'])
 def get_jobs_status():
-    result = None
     try:
         jobs = []
         for job_id in request.get_json():
@@ -139,7 +138,9 @@ def get_jobs_status():
         return jsonify(result)
     except Exception as e:
         app.logger.error("Exception at get_jobs_status(): %s" % e)
+        result = {'status': 'error', 'message': str(e)}
         app.logger.error("result: %s" % result)
+        return jsonify(result)
 
 
 @app.route('/jobs', methods=['GET'])
