@@ -119,6 +119,7 @@ def get_status(job_id):
 
 @app.route('/jobs/status', methods=['POST'])
 def get_jobs_status():
+    result = None
     try:
         jobs = []
         for job_id in request.get_json():
