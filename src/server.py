@@ -139,18 +139,21 @@ def get_jobs_status():
 
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
-    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-        q = Queue()
-        jobs = q.jobs
-    if jobs:
-        response_object = {
-            'status': 'success',
-            'data': {
-                'jobs': list(map(lambda job: get_job_data(job), jobs))
+    try:
+        with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+            q = Queue()
+            jobs = q.jobs
+        if jobs:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'jobs': list(map(lambda job: get_job_data(job), jobs))
+                }
             }
-        }
-    else:
-        response_object = {'status': 'error'}
+        else:
+            response_object = {'status': 'error', 'message': 'no job found'}
+    except Exception as e:
+        response_object = {'status': 'error', 'message': str(e)}
     return jsonify(response_object)
 
 
