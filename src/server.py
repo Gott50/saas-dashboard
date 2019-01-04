@@ -62,6 +62,7 @@ def upload_file():
             return "uploaded %s" % filename
     return render_template('upload.html', uploads=list_uploads())
 
+
 @app.route('/delete', methods=['GET', 'POST'])
 def delete_file():
     if request.method == 'POST':
@@ -76,12 +77,15 @@ def create_checkout():
     job_ids = []
     for f in request.form:
         if not (f == 'username' or f == 'password') and request.form[f] == 'on':
-            with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-                q = Queue()
-                job = q.enqueue_call(func=create_task, args=(
-                    request.form['username'], request.form['password'], f, (pars_sleep())),
-                                     job_id="%s: %s" % (request.form['username'], f))
-                job_ids += [job.get_id()]
+            try:
+                with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+                    q = Queue()
+                    job = q.enqueue_call(func=create_task, args=(
+                        request.form['username'], request.form['password'], f, (pars_sleep())),
+                                         job_id="%s: %s" % (request.form['username'], f))
+                    job_ids += [job.get_id()]
+            except redis.exceptions.ConnectionError:
+                create_task(request.form['username'], request.form['password'], f, (pars_sleep()))
     response_object = {
         'status': 'success',
         'data': {
@@ -115,22 +119,22 @@ def get_status(job_id):
 
 @app.route('/jobs/status', methods=['POST'])
 def get_jobs_status():
-    jobs = []
-    for job_id in request.get_json():
-        with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-            q = Queue()
-            job = q.fetch_job(job_id)
-        if job:
-            jobs += [get_job_data(job)]
-        else:
-            return jsonify({'status': 'error'})
-    result = {
-        'status': 'success',
-        'data': {
-            'jobs': jobs
-        }
-    }
     try:
+        jobs = []
+        for job_id in request.get_json():
+            with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+                q = Queue()
+                job = q.fetch_job(job_id)
+            if job:
+                jobs += [get_job_data(job)]
+            else:
+                return jsonify({'status': 'error'})
+        result = {
+            'status': 'success',
+            'data': {
+                'jobs': jobs
+            }
+        }
         return jsonify(result)
     except Exception as e:
         app.logger.error("Exception at get_jobs_status(): %s" % e)
