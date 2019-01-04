@@ -149,11 +149,33 @@ class Bot:
                 self.answering(driver, answers)
                 sleep(self.sleep_time)
         except selenium.common.exceptions.TimeoutException:
-            text = driver.find_element_by_id("Assessment").get_attribute('innerHTML')
-            self.save_assessment(answer_file, text)
+            assessment = driver.find_element_by_id("Assessment")
+            result = assessment.text
+
+            try:
+                result_report_questions_driver = assessment.find_element_by_id("ResultReportQuestions")
+                questions_drivers = result_report_questions_driver.find_elements_by_css_selector('h3 > div > table > tbody > tr > td:nth-child(2)')
+                answers_drivers = result_report_questions_driver.find_elements_by_css_selector('.csstable')
+
+                for i in range(len(questions_drivers)):
+                    print(questions_drivers[i].text)
+                    if questions_drivers[i].text in self.get_job_meta()['unknown_question']:
+                        result += questions_drivers[i].get_attribute('innerHTML')
+                        result += answers_drivers[i].get_attribute('innerHTML')
+            except Exception as e:
+                self.print("Exception in act(): %s" % e)
+
+            self.save_assessment(answer_file, result)
 
             self.print("done Answering")
-            return text
+            return result
+
+    def get_job_meta(self):
+        try:
+            return get_current_job().meta
+        except Exception as e:
+            self.print(e)
+            return []
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
