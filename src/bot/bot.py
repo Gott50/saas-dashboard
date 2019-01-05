@@ -145,29 +145,29 @@ class Bot:
                 self.answering(driver, answers)
                 sleep(self.sleep_time)
         except selenium.common.exceptions.TimeoutException:
-            assessment = driver.find_element_by_id("Assessment")
-            result = assessment.find_element_by_id("QuestionNavBarTitle").text \
-                     or assessment.find_element_by_id("assessment-mismatch-line1").text
+            return self.generate_result(answer_file, driver)
 
-            try:
-                result_report_questions_driver = assessment.find_element_by_id("ResultReportQuestions")
-                questions_drivers = result_report_questions_driver.find_elements_by_css_selector('h3')
-                answers_drivers = result_report_questions_driver.find_elements_by_css_selector('.csstable')
+    def generate_result(self, answer_file, driver):
+        assessment = driver.find_element_by_id("Assessment")
+        result = assessment.find_element_by_id("QuestionNavBarTitle").text \
+                 or assessment.find_element_by_id("assessment-mismatch-line1").text
+        try:
+            result_report_questions_driver = assessment.find_element_by_id("ResultReportQuestions")
+            questions_drivers = result_report_questions_driver.find_elements_by_css_selector('h3')
+            answers_drivers = result_report_questions_driver.find_elements_by_css_selector('.csstable')
 
-                for i in range(len(questions_drivers)):
-                    index = questions_drivers[i].text.find(".") + 3
-                    if questions_drivers[i].text[index:] in self.get_unknown_questions():
-                        q = questions_drivers[i].get_attribute("outerHTML")
-                        a = answers_drivers[i].get_attribute("outerHTML")
-                        result += q
-                        result += a
-            except Exception as e:
-                self.print("Exception in act(): %s" % e)
-
-            self.save_assessment(answer_file, result)
-
-            self.print("done Answering")
-            return result
+            for i in range(len(questions_drivers)):
+                index = questions_drivers[i].text.find(".") + 3
+                if questions_drivers[i].text[index:] in self.get_unknown_questions():
+                    q = questions_drivers[i].get_attribute("outerHTML")
+                    a = answers_drivers[i].get_attribute("outerHTML")
+                    result += q
+                    result += a
+        except Exception as e:
+            self.print("Exception in act(): %s" % e)
+        self.save_assessment(answer_file, result)
+        self.print("done Answering")
+        return result
 
     def get_unknown_questions(self):
         try:
