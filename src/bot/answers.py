@@ -38,7 +38,7 @@ class Answers:
         except Exception as e:
             self.print("possible Exception caused by end of File: %s" % e)
         self.print('saved new possible Answer: \n%s' % answer)
-        self.add_job_meta_unknown_question(self.sheet['A%s' % row].value)
+        self.add_job_meta_unknown_questions(self.sheet['A%s' % row].value)
 
     def add_job_meta_new_question(self, question: str):
         try:
@@ -50,12 +50,12 @@ class Answers:
         except Exception as e:
             self.print(e)
 
-    def add_job_meta_unknown_question(self, question: str):
+    def add_job_meta_unknown_questions(self, question: str):
         try:
             job = get_current_job()
-            if not job.meta['unknown_question']:
-                job.meta['unknown_question'] = []
-            job.meta['unknown_question'] += [question]
+            if not job.meta['unknown_questions']:
+                job.meta['unknown_questions'] = []
+            job.meta['unknown_questions'] += [question]
             job.save_meta()
         except Exception as e:
             self.print(e)

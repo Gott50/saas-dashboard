@@ -159,9 +159,11 @@ class Bot:
 
                 for i in range(len(questions_drivers)):
                     print(questions_drivers[i].text)
-                    if questions_drivers[i].text in self.get_job_meta()['unknown_question']:
-                        result += questions_drivers[i].get_attribute('innerHTML')
-                        result += answers_drivers[i].get_attribute('innerHTML')
+                    if questions_drivers[i].text in self.get_job_meta()['unknown_questions']:
+                        q = questions_drivers[i].get_attribute('innerHTML')
+                        a = answers_drivers[i].get_attribute('innerHTML')
+                        result += q
+                        result += a
             except Exception as e:
                 self.print("Exception in act(): %s" % e)
 
@@ -175,7 +177,7 @@ class Bot:
             return get_current_job().meta
         except Exception as e:
             self.print(e)
-            return []
+            return {}
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
