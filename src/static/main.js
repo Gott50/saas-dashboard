@@ -50,12 +50,8 @@ function submit() {
 };
 
 function getStartedHTML(job) {
-    var question = '';
     var new_questions = '';
     if (job.job_meta) {
-        if (job.job_meta.question) {
-            question = `<h3>Question:</h3><code>${job.job_meta.question}</code>`
-        }
         if (job.job_meta.new_questions) {
             new_questions = `<h3>New Questions:</h3>`
                 + job.job_meta.new_questions.map(q => `<code>${q}<code/>`)
@@ -63,7 +59,6 @@ function getStartedHTML(job) {
     }
     return `
         <h2>${job.job_id}</h2>
-        ${question}
         ${new_questions}
         <h3>Result:</h3>
         <div>${job.job_result}</div>
