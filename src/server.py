@@ -80,7 +80,7 @@ def create_checkout():
             try:
                 with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                     q = Queue()
-                    job = q.enqueue_call(func=create_task, args=(
+                    job = q.enqueue_call(timeout='3m', result_ttl=10000, ttl=-1, func=create_task, args=(
                         request.form['username'], request.form['password'], f, (pars_sleep())),
                                          job_id="%s: %s" % (request.form['username'], f))
                     job_ids += [job.get_id()]
@@ -128,7 +128,7 @@ def get_jobs_status():
             if job:
                 jobs += [get_job_data(job)]
             else:
-                return jsonify({'status': 'error'})
+                return jsonify({'status': 'error', 'message': 'no job found'})
         result = {
             'status': 'success',
             'data': {
@@ -157,7 +157,7 @@ def get_jobs():
                 }
             }
         else:
-            response_object = {'status': 'error', 'message': 'no job found'}
+            response_object = {'status': 'error', 'message': 'no jobs found'}
     except Exception as e:
         response_object = {'status': 'error', 'message': str(e)}
     return jsonify(response_object)
