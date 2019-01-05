@@ -3,8 +3,8 @@ import os
 from bot import Bot
 
 
-def create_task(username, password, answer_file, sleep=2):
-    bot = init_Bot(username=username, password=password, sleep=sleep)
+def create_task(username, password, answer_file, sleep=2, print=print):
+    bot = init_Bot(username=username, password=password, sleep=sleep, print=print)
     try:
         print('Starting: %s' % answer_file)
         result = bot.act(answer_file=answer_file)
