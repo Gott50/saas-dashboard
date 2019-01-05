@@ -2,25 +2,21 @@ import re
 from datetime import datetime
 
 import selenium
+from rq import get_current_job
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.common.proxy import Proxy, ProxyType
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from bot.time_util import sleep
 from bot.users import Users
-from .settings import Settings
 from .answers import Answers
-
-from rq import get_current_job
+from .settings import Settings
 
 
 class Bot:
@@ -150,18 +146,19 @@ class Bot:
                 sleep(self.sleep_time)
         except selenium.common.exceptions.TimeoutException:
             assessment = driver.find_element_by_id("Assessment")
-            result = assessment.text
+            result = assessment.find_element_by_id("QuestionNavBarTitle").text \
+                     or assessment.find_element_by_id("assessment-mismatch-line1").text
 
             try:
                 result_report_questions_driver = assessment.find_element_by_id("ResultReportQuestions")
-                questions_drivers = result_report_questions_driver.find_elements_by_css_selector('h3 > div > table > tbody > tr > td:nth-child(2)')
+                questions_drivers = result_report_questions_driver.find_elements_by_css_selector('h3')
                 answers_drivers = result_report_questions_driver.find_elements_by_css_selector('.csstable')
 
                 for i in range(len(questions_drivers)):
-                    print(questions_drivers[i].text)
-                    if questions_drivers[i].text in self.get_job_meta()['unknown_questions']:
-                        q = questions_drivers[i].get_attribute('innerHTML')
-                        a = answers_drivers[i].get_attribute('innerHTML')
+                    index = questions_drivers[i].text.find(".") + 3
+                    if questions_drivers[i].text[index:] in self.get_job_meta()['unknown_questions']:
+                        q = questions_drivers[i].get_attribute("outerHTML")
+                        a = answers_drivers[i].get_attribute("outerHTML")
                         result += q
                         result += a
             except Exception as e:
@@ -177,7 +174,7 @@ class Bot:
             return get_current_job().meta
         except Exception as e:
             self.print(e)
-            return {}
+            return {'unknown_questions': []}
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
