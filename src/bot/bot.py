@@ -156,7 +156,7 @@ class Bot:
 
                 for i in range(len(questions_drivers)):
                     index = questions_drivers[i].text.find(".") + 3
-                    if questions_drivers[i].text[index:] in self.get_job_meta()['unknown_questions']:
+                    if questions_drivers[i].text[index:] in self.get_unknown_questions():
                         q = questions_drivers[i].get_attribute("outerHTML")
                         a = answers_drivers[i].get_attribute("outerHTML")
                         result += q
@@ -169,12 +169,12 @@ class Bot:
             self.print("done Answering")
             return result
 
-    def get_job_meta(self):
+    def get_unknown_questions(self):
         try:
-            return get_current_job().meta
+            return get_current_job().meta['unknown_questions']
         except Exception as e:
             self.print(e)
-            return {'unknown_questions': []}
+            return []
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
