@@ -127,8 +127,6 @@ def get_jobs_status():
                 job = q.fetch_job(job_id)
             if job:
                 jobs += [get_job_data(job)]
-            else:
-                return jsonify({'status': 'error', 'message': 'no job found'})
         result = {
             'status': 'success',
             'data': {
