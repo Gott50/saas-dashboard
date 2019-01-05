@@ -159,10 +159,8 @@ class Bot:
             for i in range(len(questions_drivers)):
                 index = questions_drivers[i].text.find(".") + 3
                 if questions_drivers[i].text[index:] in self.get_unknown_questions():
-                    q = questions_drivers[i].get_attribute("outerHTML")
-                    a = answers_drivers[i].get_attribute("outerHTML")
-                    result += q
-                    result += a
+                    result += questions_drivers[i].get_attribute("outerHTML")
+                    result += answers_drivers[i].get_attribute("outerHTML")
         except Exception as e:
             self.print("Exception in act(): %s" % e)
         self.save_assessment(answer_file, result)
