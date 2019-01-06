@@ -80,7 +80,7 @@ def create_checkout():
             try:
                 with Connection(redis.from_url(current_app.config['REDIS_URL'])):
                     q = Queue()
-                    job = q.enqueue_call(timeout='3m', result_ttl=10000, ttl=-1, func=create_task, args=(
+                    job = q.enqueue_call(timeout=600, result_ttl=10000, ttl=-1, func=create_task, args=(
                         request.form['username'], request.form['password'], f, (pars_sleep())),
                                          job_id="%s: %s" % (request.form['username'], f))
                     job_ids += [job.get_id()]
