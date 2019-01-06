@@ -8,7 +8,6 @@ function add_watcher(job_ids) {
 
 function startWatcher() {
     requestJobsStatus(watch_job_ids, started);
-    getQueue();
     setTimeout(startWatcher, 10000);
 }
 
@@ -27,7 +26,6 @@ function requestJobsStatus(watch_job_ids, callback) {
 }
 
 function started(res) {
-    res.data.jobs.filter(job => job.job_status === 'started').forEach(getStarted);
     res.data.jobs.filter(job => job.job_status === 'finished').forEach(getFinished);
 }
 
