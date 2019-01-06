@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assessment.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='hide.css') }}" type="text/css">
 </head>
-<form>
+<form id="data">
     <div>
         <label for="username">Username:
             <input type="text" name="username" required>
@@ -14,6 +14,9 @@
             <input type="password" name="password" required>
         </label>
     </div>
+
+    <input type=file name=file>
+
     <div>
         <label for="sleep">Sleep Seconds:
             <input type="number" name="sleep" value="2" required>
@@ -25,9 +28,9 @@
                 <input class="checkbox" type="checkbox" name="{{ item }}">{{ item }}</label>
         </div>
     {% endfor %}
+    <input type="submit" name="submit" value="Start"/>
 </form>
 <button onclick='selectAll()'>Select All</button>
-<button onclick='submit()' value=Start>Start</button>
 
 
 <h1>Upload new File</h1>

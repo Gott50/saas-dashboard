@@ -1,5 +1,6 @@
 import os
 
+import openpyxl
 import redis
 from flask import Flask, redirect, flash
 from flask import render_template, jsonify, \
@@ -13,6 +14,9 @@ from bot.tasks import create_task
 from bot.users import Users
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
+TMP_FOLDER = os.environ.get('TMP_FOLDER') or './tmp'
+os.mkdir(TMP_FOLDER)
+
 Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
@@ -74,18 +78,36 @@ def delete_file():
 
 @app.route('/user', methods=['POST'])
 def create_checkout():
+    logins = [{'username': request.form['username'], 'password': request.form['password']}]
+    if 'file' in request.files:
+        file = request.files['file']
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(TMP_FOLDER, filename))
+
+            wb = openpyxl.load_workbook(os.path.join(TMP_FOLDER, filename))
+            sheet = wb[wb.sheetnames[0]]
+            for cell_a in sheet['A']:
+                cell_b = sheet['B%s' % cell_a.row]
+                if cell_a.value and cell_b.value:
+                    logins += [{'username': cell_a.value, 'password': cell_b.value}]
+
     job_ids = []
-    for f in request.form:
-        if not (f == 'username' or f == 'password') and request.form[f] == 'on':
-            try:
-                with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-                    q = Queue()
-                    job = q.enqueue_call(timeout=600, ttl=-1, func=create_task, args=(
-                        request.form['username'], request.form['password'], f, (pars_sleep())),
-                                         job_id="%s: %s" % (request.form['username'], f))
-                    job_ids += [job.get_id()]
-            except redis.exceptions.ConnectionError:
-                create_task(request.form['username'], request.form['password'], f, (pars_sleep()))
+    for login in logins:
+        for f in request.form:
+            if not (f == 'username' or f == 'password') and request.form[f] == 'on':
+                username = login['username']
+                password = login['password']
+                try:
+                    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+                        q = Queue()
+                        job = q.enqueue_call(timeout=600, ttl=-1, func=create_task, args=(
+                            username, password, f, (pars_sleep())),
+                                             job_id="%s: %s" % (username, f))
+                        job_ids += [job.get_id()]
+                except redis.exceptions.ConnectionError:
+                    create_task(username, password, f, (pars_sleep()))
     response_object = {
         'status': 'success',
         'data': {

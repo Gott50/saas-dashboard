@@ -12,6 +12,7 @@ services:
     - selenium:selenium
     environment:
     - UPLOAD_FOLDER=/app/uploads
+    - TMP_FOLDER=/app/tmp
     - SELENIUM=selenium
   selenium:
     image: selenium/standalone-chrome

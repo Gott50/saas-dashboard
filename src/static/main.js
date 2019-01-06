@@ -36,18 +36,23 @@ $(document).ready(() => {
     startWatcher()
 });
 
-function submit() {
-    console.log($('form').serialize())
+$("form#data").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+
     $.ajax({
         url: '/user',
-        data: $('form').serialize(),
-        method: 'POST'
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false
     })
         .done(res => add_watcher(res.data.job_ids))
         .fail((err) => {
             console.error(err)
         });
-};
+});
 
 function getStartedHTML(job) {
     var new_questions = '';
