@@ -104,17 +104,30 @@ def pars_sleep():
 
 @app.route('/jobs/<job_id>', methods=['GET'])
 def get_status(job_id):
-    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-        q = Queue()
-        job = q.fetch_job(job_id)
-    if job:
-        response_object = {
-            'status': 'success',
-            'data': get_job_data(job)
+    return jsonify(get_job(job_id))
+
+
+def get_job(job_id):
+    try:
+        with Connection(redis.from_url(current_app.config['REDIS_URL'])):
+            q = Queue()
+            job = q.fetch_job(job_id)
+        if job:
+            return get_job_data(job)
+        else:
+            return {
+                "job_id": job_id,
+                "job_meta": {},
+                "job_result": "Job not found",
+                "job_status": "Job not found"
+            }
+    except Exception as e:
+        return {
+            "job_id": job_id,
+            "job_meta": {},
+            "job_result": str(e),
+            "job_status": str(e)
         }
-    else:
-        response_object = {'status': 'error'}
-    return jsonify(response_object)
 
 
 @app.route('/jobs/status', methods=['POST'])
@@ -122,11 +135,7 @@ def get_jobs_status():
     try:
         jobs = []
         for job_id in request.get_json():
-            with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-                q = Queue()
-                job = q.fetch_job(job_id)
-            if job:
-                jobs += [get_job_data(job)]
+            jobs += [get_job(job_id)]
         result = {
             'status': 'success',
             'data': {
