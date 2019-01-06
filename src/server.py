@@ -15,7 +15,10 @@ from bot.users import Users
 
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 TMP_FOLDER = os.environ.get('TMP_FOLDER') or './tmp'
-os.mkdir(TMP_FOLDER)
+try:
+    os.mkdir(TMP_FOLDER)
+except:
+    print("File exists: '%s'" % TMP_FOLDER)
 
 Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
