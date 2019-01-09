@@ -126,7 +126,7 @@ class Bot:
 
     def act(self, answer_file, url=None):
         driver = self.browser
-        answers = Answers(answer_file, print=self.print)
+        answers = Answers(answer_file=answer_file, username=self.username, print=self.print)
         u = url or answers.url()
         self.print("url: %s" % u)
         driver.get(u)

@@ -5,12 +5,15 @@ import random
 import openpyxl
 from rq import get_current_job
 
+from bot.users import Users
 from .settings import Settings
 
 
 class Answers:
-    def __init__(self, answer_file,
+    def __init__(self, answer_file, username,
                  print=print):
+        self.answer_file = answer_file
+        self.username = username
         self.print = print
         self.location = os.path.join(Settings.assets_location, answer_file)
         self.wb = openpyxl.load_workbook(self.location)
@@ -41,24 +44,26 @@ class Answers:
         self.add_job_meta_unknown_questions(self.sheet['A%s' % row].value)
 
     def add_job_meta_new_question(self, question: str):
-        try:
-            job = get_current_job()
-            if not job.meta['new_questions']:
-                job.meta['new_questions'] = []
-            job.meta['new_questions'] += [question]
-            job.save_meta()
-        except Exception as e:
-            self.print(e)
+        self.add_meta('new_questions', [question])
 
     def add_job_meta_unknown_questions(self, question: str):
+        self.add_meta('unknown_questions', [question])
+
+    def add_meta(self, key, values):
         try:
             job = get_current_job()
-            if not job.meta['unknown_questions']:
-                job.meta['unknown_questions'] = []
-            job.meta['unknown_questions'] += [question]
+            if not job.meta[key]:
+                job.meta[key] = []
+            job.meta[key] += values
             job.save_meta()
         except Exception as e:
-            self.print(e)
+            if self.username in Users.users:
+                Users.users[self.username][self.answer_file][key] += values
+            else:
+                Users.users[self.username] = {self.answer_file: {key: values}}
+
+            u = Users.users[self.username][self.answer_file][key]
+            print(u)
 
     def get_answer(self, row, options, number):
         answers = list(map(lambda c: c.value, self.sheet[row][2:]))
