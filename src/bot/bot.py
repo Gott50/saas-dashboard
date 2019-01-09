@@ -176,9 +176,9 @@ class Bot:
 
     def save_assessment(self, answer_file, text):
         if self.username in Users.users:
-            Users.users[self.username][answer_file] = text
+            Users.users[self.username][answer_file]["result"] = text
         else:
-            Users.users[self.username] = {answer_file: text}
+            Users.users[self.username] = {answer_file: {'result': text}}
 
     def start_test(self, driver):
         wait = WebDriverWait(driver, 20)

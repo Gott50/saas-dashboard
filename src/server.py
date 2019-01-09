@@ -227,7 +227,7 @@ def compose_user_view(user):
 
     for test in user:
         view += '<h1 id="%s">%s</h1>' % (test, test)
-        view += user[test].replace('style="display: none;"', '').replace('style="height: 460px;"', '')
+        view += user[test]['result'].replace('style="display: none;"', '').replace('style="height: 460px;"', '')
 
     return view
 
