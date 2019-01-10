@@ -1,4 +1,4 @@
 .idea
 docker-compose.override.yml
 *.sh
-uploads/
+/src/uploads/
