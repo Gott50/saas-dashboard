@@ -2,3 +2,5 @@
 docker-compose.override.yml
 *.sh
 /src/uploads/
+/src/venv/
+/src/tmp/
