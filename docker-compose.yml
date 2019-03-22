@@ -5,7 +5,6 @@ services:
     image: gott50/saas-bot
     volumes:
       - ./src/uploads:/app/uploads
-      - ./src/bot:/app/bot
     ports:
       - 5000:5000
     depends_on:
@@ -16,33 +15,3 @@ services:
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
       - SELENIUM=selenium
-  selenium:
-    image: selenium/standalone-chrome
-    shm_size: 128M
-    ports:
-    - "4444:4444"
-
-  worker:
-    image: gott50/saas-bot
-    command: python manage.py run_worker
-    volumes:
-      - ./src/uploads:/app/uploads
-      - ./src/bot:/app/bot
-    links:
-      - selenium:selenium
-    environment:
-      - UPLOAD_FOLDER=./uploads
-      - SELENIUM=selenium
-      - APP_SETTINGS=bot.config.DevelopmentConfig
-    depends_on:
-      - redis
-      - selenium
-      - bot
-  redis:
-    image: redis:4.0.11-alpine
-  dashboard:
-    build: ./dashboard
-    image: gott50/rq-dashboard
-    ports:
-      - '9181:9181'
-    command: rq-dashboard -H redis

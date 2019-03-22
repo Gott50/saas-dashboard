@@ -8,11 +8,6 @@ from flask import render_template, jsonify, \
 from rq import Queue, Connection
 from werkzeug.utils import secure_filename
 
-from bot.config import BaseConfig
-from bot.settings import Settings
-from bot.tasks import create_task
-from bot.users import Users
-
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 TMP_FOLDER = os.environ.get('TMP_FOLDER') or './tmp'
 try:
@@ -20,11 +15,9 @@ try:
 except:
     print("File exists: '%s'" % TMP_FOLDER)
 
-Settings.assets_location = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
 app = Flask(__name__)
-app.config.from_object(BaseConfig)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -102,15 +95,7 @@ def create_checkout():
             if not (f == 'username' or f == 'password') and request.form[f] == 'on':
                 username = login['username']
                 password = login['password']
-                try:
-                    with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-                        q = Queue()
-                        job = q.enqueue_call(timeout=600, ttl=-1, func=create_task, args=(
-                            username, password, f, (pars_sleep())),
-                                             job_id="%s: %s" % (username, f))
-                        job_ids += [job.get_id()]
-                except redis.exceptions.ConnectionError:
-                    create_task(username, password, f, (pars_sleep()))
+                #TODO Start Bots
     response_object = {
         'status': 'success',
         'data': {
@@ -204,14 +189,13 @@ def get_job_data(job):
     }
 
 
+class Users(object):
+    users = {}
+
+
 @app.route('/user', methods=['GET'])
 def list_user():
     return render_template("user_list.html", users=Users.users)
-
-
-@app.route('/user', methods=['POST'])
-def upload_user():
-    return "Not Implemented", 501
 
 
 @app.route('/user/<username>', methods=['GET'])
