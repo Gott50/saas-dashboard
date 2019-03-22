@@ -14,3 +14,5 @@ services:
     environment:
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
+    env_file:
+      - .env/.bot-manager.env
