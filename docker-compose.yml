@@ -14,4 +14,3 @@ services:
     environment:
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
-      - SELENIUM=selenium

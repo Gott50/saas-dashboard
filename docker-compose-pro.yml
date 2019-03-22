@@ -10,7 +10,6 @@ services:
     environment:
     - UPLOAD_FOLDER=/app/uploads
     - TMP_FOLDER=/app/tmp
-    - SELENIUM=selenium
 
 volumes:
   uploads_data:
