@@ -74,6 +74,7 @@ def delete_file():
 
 @app.route('/user', methods=['POST'])
 def create_checkout():
+    sleep = pars_sleep()
     logins = [{'username': request.form['username'], 'password': request.form['password']}]
     if 'file' in request.files:
         file = request.files['file']
@@ -90,7 +91,7 @@ def create_checkout():
                     logins += [{'username': cell_a.value, 'password': cell_b.value}]
 
     for login in logins:
-        account = {'username': (login['username']), 'password': (login['password']), 'tasks': []}
+        account = {'username': login['username'], 'password': login['password'], 'sleep': sleep, 'tasks': []}
         for task in request.form:
             if not (task == 'username' or task == 'password') and request.form[task] == 'on':
                 account['tasks'] += [task]
@@ -103,7 +104,7 @@ def pars_sleep():
     try:
         return int(request.form["sleep"])
     except ValueError:
-        return None
+        return 2
 
 
 class Users(object):
