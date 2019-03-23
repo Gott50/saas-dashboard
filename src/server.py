@@ -1,11 +1,8 @@
 import os
 
 import openpyxl
-import redis
 from flask import Flask, redirect, flash
-from flask import render_template, jsonify, \
-    request, current_app
-from rq import Queue, Connection
+from flask import render_template, request, jsonify
 from werkzeug.utils import secure_filename
 
 from manager.activity import Activity
@@ -107,83 +104,6 @@ def pars_sleep():
         return int(request.form["sleep"])
     except ValueError:
         return None
-
-
-@app.route('/jobs/<job_id>', methods=['GET'])
-def get_status(job_id):
-    return jsonify(get_job(job_id))
-
-
-def get_job(job_id):
-    try:
-        with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-            q = Queue()
-            job = q.fetch_job(job_id)
-        if job:
-            return get_job_data(job)
-        else:
-            return {
-                "job_id": job_id,
-                "job_meta": {},
-                "job_result": "Job not found",
-                "job_status": "Job not found"
-            }
-    except Exception as e:
-        return {
-            "job_id": job_id,
-            "job_meta": {},
-            "job_result": str(e),
-            "job_status": str(e)
-        }
-
-
-@app.route('/jobs/status', methods=['POST'])
-def get_jobs_status():
-    try:
-        jobs = []
-        for job_id in request.get_json():
-            jobs += [get_job(job_id)]
-        result = {
-            'status': 'success',
-            'data': {
-                'jobs': jobs
-            }
-        }
-        return jsonify(result)
-    except Exception as e:
-        app.logger.error("Exception at get_jobs_status(): %s" % e)
-        result = {'status': 'error', 'message': str(e)}
-        app.logger.error("result: %s" % result)
-        return jsonify(result)
-
-
-@app.route('/jobs', methods=['GET'])
-def get_jobs():
-    try:
-        with Connection(redis.from_url(current_app.config['REDIS_URL'])):
-            q = Queue()
-            jobs = q.jobs
-        if jobs:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'jobs': list(map(lambda job: get_job_data(job), jobs))
-                }
-            }
-        else:
-            response_object = {'status': 'error', 'message': 'no jobs found'}
-    except Exception as e:
-        response_object = {'status': 'error', 'message': str(e)}
-    return jsonify(response_object)
-
-
-def get_job_data(job):
-    return {
-        'job_id': job.get_id(),
-        'job_status': job.get_status(),
-        'job_result': job.result,
-        'job_meta': job.meta,
-    }
 
 
 class Users(object):
