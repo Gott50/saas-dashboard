@@ -8,6 +8,8 @@ from flask import render_template, jsonify, \
 from rq import Queue, Connection
 from werkzeug.utils import secure_filename
 
+from manager.activity import Activity
+
 UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER') or './uploads'
 TMP_FOLDER = os.environ.get('TMP_FOLDER') or './tmp'
 try:
@@ -19,6 +21,7 @@ ALLOWED_EXTENSIONS = {'xlsx', 'xlsm', 'xltx', 'xltm'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+activity = Activity(logger=app.logger)
 
 
 def make_dir():
@@ -89,20 +92,14 @@ def create_checkout():
                 if cell_a.value and cell_b.value:
                     logins += [{'username': cell_a.value, 'password': cell_b.value}]
 
-    job_ids = []
     for login in logins:
-        for f in request.form:
-            if not (f == 'username' or f == 'password') and request.form[f] == 'on':
-                username = login['username']
-                password = login['password']
-                #TODO Start Bots
-    response_object = {
-        'status': 'success',
-        'data': {
-            'job_ids': job_ids
-        }
-    }
-    return jsonify(response_object), 202
+        account = {'username': (login['username']), 'password': (login['password']), 'tasks': []}
+        for task in request.form:
+            if not (task == 'username' or task == 'password') and request.form[task] == 'on':
+                account['tasks'] += [task]
+
+        activity.start_bot(account=account)
+    return 202
 
 
 def pars_sleep():

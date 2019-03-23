@@ -12,8 +12,8 @@ class Activity:
         self.aws = AWS(logger)
 
     def start_bot(self, account):
-        if not self.is_running(username=account.username):
-            print("Start new Thread for Bot: %s" % account.username)
+        if not self.is_running(username=account['username']):
+            print("Start new Thread for Bot: %s" % account['username'])
             thread = threading.Thread(target=self.start_account, args=(account,))
             return thread.start()
 
@@ -21,10 +21,11 @@ class Activity:
         return self.aws.get_ip(user=username)
 
     def start_account(self, account):
-        ip = self.aws.start(user=account.username)
-        self.logger.warning("start_bot for %s at ip: %s" % (account.username, ip))
+        ip = self.aws.start(user=account['username'])
+        self.logger.warning("start_bot for %s at ip: %s" % (account['username'], ip))
 
         sleep(120)
 
         return subprocess.Popen(["./start_bot.sh"] +
-                                [ip, account.username, account.password])
+                                [ip, account['username'], account['password']] +
+                                account['tasks'])
