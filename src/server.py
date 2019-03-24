@@ -97,7 +97,7 @@ def create_checkout():
                 account['tasks'] += [task]
 
         activity.start_bot(account=account)
-    return 202
+    return "success", 202
 
 
 def pars_sleep():
