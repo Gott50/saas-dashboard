@@ -1,15 +1,14 @@
 version: '3'
 services:
   dashboard:
-    build: .
     image: gott50/saas-bot
     volumes:
-    - uploads_data:/app/uploads
+      - uploads_data:/app/uploads
     ports:
-    - 5000:5000
+      - 5000:5000
     environment:
-    - UPLOAD_FOLDER=/app/uploads
-    - TMP_FOLDER=/app/tmp
+      - UPLOAD_FOLDER=/app/uploads
+      - TMP_FOLDER=/app/tmp
     env_file:
       - .env/.bot-manager.env
 volumes:

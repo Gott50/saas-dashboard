@@ -1,16 +1,12 @@
 version: '3'
 services:
-  bot:
+  dashboard:
     build: .
     image: gott50/saas-bot
     volumes:
       - ./src/uploads:/app/uploads
     ports:
       - 5000:5000
-    depends_on:
-      - selenium
-    links:
-      - selenium:selenium
     environment:
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
