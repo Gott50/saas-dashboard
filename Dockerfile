@@ -24,6 +24,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk del .build-deps
 
 COPY ./src/ ./
+COPY ./.aws /root/.aws
 
 EXPOSE 5000
 CMD python server.py

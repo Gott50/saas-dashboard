@@ -1,7 +1,7 @@
 version: '3'
 services:
   dashboard:
-    image: gott50/saas-bot
+    image: gott50/saas-dashboard
     volumes:
       - uploads_data:/app/uploads
     ports:
