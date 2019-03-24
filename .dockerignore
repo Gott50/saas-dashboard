@@ -1,3 +1,4 @@
 /src/uploads/
 /src/venv/
 /src/tmp/
+*.pem
