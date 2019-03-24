@@ -21,6 +21,7 @@ RUN apk add --no-cache --virtual .build-deps \
                 | sort -u \
     )" \
     && apk add --virtual .rundeps $runDeps \
+    && apk add openssh \
     && apk del .build-deps
 
 COPY ./src/ ./
