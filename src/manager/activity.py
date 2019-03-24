@@ -2,18 +2,18 @@ import threading
 from time import sleep
 
 import subprocess
-
+import logging
 from manager.AWS import AWS
 
 
 class Activity:
-    def __init__(self, logger):
+    def __init__(self, logger=logging):
         self.logger = logger
         self.aws = AWS(logger)
 
     def start_bot(self, account):
         if not self.is_running(username=account['username']):
-            print("Start new Thread for Bot: %s" % account['username'])
+            self.logger.warning("Start new Thread for Bot: %s" % account['username'])
             thread = threading.Thread(target=self.start_account, args=(account,))
             return thread.start()
 
