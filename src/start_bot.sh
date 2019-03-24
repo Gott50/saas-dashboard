@@ -1,8 +1,8 @@
 #!/bin/sh
-echo $SSH_KEY > ./tmp
-tr '_' '\n' < ./tmp > ./id_rsa
+echo $SSH_KEY > ./tmp_id
+tr '_' '\n' < ./tmp_id > ./id_rsa
 chmod 600 ./id_rsa
-rm ./tmp
+rm ./tmp_id
 
 IP=$1
 shift
