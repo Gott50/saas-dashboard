@@ -11,5 +11,6 @@ services:
       - TMP_FOLDER=/app/tmp
     env_file:
       - .env/.bot-manager.env
+      - .env/.manager.env
 volumes:
   uploads_data:

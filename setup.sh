@@ -3,6 +3,17 @@
 docker-compose build
 docker-compose push
 
+P_USER=$1
+shift
+
+
+id_rsa=$(cat ./saas-bot.pem)
+SSH_KEY=${id_rsa//
+/_}
+mkdir .env
+echo "SSH_KEY=$SSH_KEY" > .env/.manager.env
+echo ".manager.env: $(cat .env/.manager.env)"
+
 
 docker-machine create --driver $@
 name=${@: -1}
