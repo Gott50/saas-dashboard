@@ -26,6 +26,5 @@ class Activity:
 
         sleep(120)
 
-        return subprocess.Popen(["./start_bot.sh"] +
-                                [ip, account['username'], account['password']] +
-                                account['tasks'])
+        return subprocess.Popen(["./start_bot.sh", ip] +
+                                [account['username'], account['password']] + account['tasks'])
