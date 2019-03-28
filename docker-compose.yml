@@ -4,10 +4,12 @@ services:
     build: .
     image: gott50/saas-dashboard
     volumes:
-      - ./src/uploads:/app/uploads
+      - ./src:/app
     ports:
       - 5000:5000
     environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=development
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
     env_file:
