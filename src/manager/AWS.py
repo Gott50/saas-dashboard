@@ -2,6 +2,8 @@ import boto3
 import os
 from time import sleep
 
+KEYNAME = 'saas-bot'
+SECURITYGROUPS = ['saas-bot']
 IMAGE_ID = os.environ.get('IMAGE_ID')
 
 
@@ -23,7 +25,7 @@ class AWS:
         else:
             instance = self.ec2.create_instances(
                 ImageId=IMAGE_ID, InstanceType='t2.micro',
-                KeyName='saas-bot', SecurityGroups=['saas-bot'],
+                KeyName=KEYNAME, SecurityGroups=SECURITYGROUPS,
                 MaxCount=1, MinCount=1,
                 TagSpecifications=[
                     {
