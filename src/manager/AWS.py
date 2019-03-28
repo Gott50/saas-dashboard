@@ -23,7 +23,7 @@ class AWS:
         else:
             instance = self.ec2.create_instances(
                 ImageId=IMAGE_ID, InstanceType='t2.micro',
-                KeyName='bot', SecurityGroups=['bot'],
+                KeyName='saas-bot', SecurityGroups=['saas-bot'],
                 MaxCount=1, MinCount=1,
                 TagSpecifications=[
                     {
