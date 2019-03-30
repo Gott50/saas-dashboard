@@ -29,8 +29,7 @@ class Activity:
 
         sleep(120)
 
-        return subprocess.Popen(["./start_bot.sh", ip] +
-                                [account['username'], account['password']] + account['tasks'])
+        return self.cmd_start_bot(account, ip)
 
     def restart_account(self, account):
         # TODO use restart instead of stop and start
@@ -40,5 +39,8 @@ class Activity:
 
         sleep(120)
 
+        return self.cmd_start_bot(account, ip)
+
+    def cmd_start_bot(self, account, ip):
         return subprocess.Popen(["./start_bot.sh", ip] +
                                 [account['username'], account['password']] + account['tasks'])
