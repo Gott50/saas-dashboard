@@ -14,3 +14,4 @@ services:
       - TMP_FOLDER=./tmp
     env_file:
       - .env/.bot-manager.env
+      - .env/.manager.env
