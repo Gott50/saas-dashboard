@@ -32,10 +32,8 @@ class Activity:
         return self.cmd_start_bot(account, ip)
 
     def restart_account(self, account):
-        # TODO use restart instead of stop and start
-        self.aws.stop(account)
-        ip = self.aws.start(user=account['username'])
-        self.logger.warning("start_bot for %s at ip: %s" % (account['username'], ip))
+        ip = self.aws.restart(user=account['username'])
+        self.logger.warning("restart for %s at ip: %s" % (account['username'], ip))
 
         sleep(120)
 

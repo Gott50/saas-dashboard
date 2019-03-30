@@ -43,6 +43,17 @@ class AWS:
 
         return self.wait_for_instance(instance).public_ip_address
 
+    def restart(self, user):
+        not_terminated_instances = list(filter(lambda i: i.state['Name'] != 'terminated', self.get_user_instance_list(user=user)))
+        if len(not_terminated_instances) >= 1:
+            instance = not_terminated_instances[0]
+            instance.reboot()
+            self.logger.warning("for User %s start old Instance: %s" % (user, instance))
+            return self.wait_for_instance(instance).public_ip_address
+        else:
+            self.logger.warning("No Instance found for User: %s" % user)
+            raise Exception("No Instance found for User: %s" % user)
+
     def stop(self, user):
         not_terminated_instances = list(
             filter(lambda i: i.state['Name'] != 'terminated', self.get_user_instance_list(user=user)))
