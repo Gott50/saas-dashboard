@@ -12,15 +12,29 @@ class Activity:
         self.aws = AWS(logger)
 
     def start_bot(self, account):
-        if not self.is_running(username=account['username']):
-            self.logger.warning("Start new Thread for Bot: %s" % account['username'])
+        if self.is_running(username=account['username']):
+            self.logger.warning("new Thread to ReStart Bot for: %s" % account['username'])
+            thread = threading.Thread(target=self.restart_account, args=(account,))
+        else:
+            self.logger.warning("new Thread to Start Bot for: %s" % account['username'])
             thread = threading.Thread(target=self.start_account, args=(account,))
-            return thread.start()
+        return thread.start()
 
     def is_running(self, username):
         return self.aws.get_ip(user=username)
 
     def start_account(self, account):
+        ip = self.aws.start(user=account['username'])
+        self.logger.warning("start_bot for %s at ip: %s" % (account['username'], ip))
+
+        sleep(120)
+
+        return subprocess.Popen(["./start_bot.sh", ip] +
+                                [account['username'], account['password']] + account['tasks'])
+
+    def restart_account(self, account):
+        # TODO use restart instead of stop and start
+        self.aws.stop(account)
         ip = self.aws.start(user=account['username'])
         self.logger.warning("start_bot for %s at ip: %s" % (account['username'], ip))
 
