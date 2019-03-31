@@ -10,4 +10,5 @@ shift
 echo Dashboard Parameters: $@
 
 scp -o StrictHostKeychecking=no -i ./id_rsa -r ./bot_scripts $P_USER@$IP:
+scp -o StrictHostKeychecking=no -i ./id_rsa -r ./uploads $P_USER@$IP:
 ssh -o StrictHostKeychecking=no -tt -i ./id_rsa $P_USER@$IP "bash bot_scripts/start_bot.sh $@"
