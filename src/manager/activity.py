@@ -35,7 +35,7 @@ class Activity:
         ip = self.aws.restart(user=account['username'])
         self.logger.warning("restart for %s at ip: %s" % (account['username'], ip))
 
-        sleep(120)
+        sleep(60)
 
         return self.cmd_start_bot(account, ip)
 
