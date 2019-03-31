@@ -41,4 +41,4 @@ echo Composition CMD: $CMD
 $CMD
 
 echo Start stopped_shutdown.sh
-nohup sudo bash ./stopped_shutdown.sh
+nohup sudo bash ./bot_scripts/stopped_shutdown.sh
