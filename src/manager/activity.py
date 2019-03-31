@@ -40,5 +40,6 @@ class Activity:
         return self.cmd_start_bot(account, ip)
 
     def cmd_start_bot(self, account, ip):
+        self.logger.warning("run start_bot.sh on IP %s for User: %s" % (ip, account))
         return subprocess.Popen(["./start_bot.sh", ip] +
                                 [account['username'], account['password']] + account['tasks'])

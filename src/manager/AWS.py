@@ -48,7 +48,7 @@ class AWS:
         if len(not_terminated_instances) >= 1:
             instance = not_terminated_instances[0]
             instance.reboot()
-            self.logger.warning("for User %s start old Instance: %s" % (user, instance))
+            self.logger.warning("for User %s ReStart old Instance: %s" % (user, instance))
             return self.wait_for_instance(instance).public_ip_address
         else:
             self.logger.warning("No Instance found for User: %s" % user)
