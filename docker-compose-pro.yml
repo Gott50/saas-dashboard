@@ -9,6 +9,7 @@ services:
     environment:
       - UPLOAD_FOLDER=/app/uploads
       - TMP_FOLDER=/app/tmp
+      - P_USER=ec2-user
     env_file:
       - .env/.bot-manager.env
       - .env/.manager.env

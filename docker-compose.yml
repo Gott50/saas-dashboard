@@ -12,6 +12,7 @@ services:
       - FLASK_ENV=development
       - UPLOAD_FOLDER=./uploads
       - TMP_FOLDER=./tmp
+      - P_USER=ec2-user
     env_file:
       - .env/.bot-manager.env
       - .env/.manager.env
