@@ -1,5 +1,18 @@
 #!/bin/bash
 
+#USER=$USER -e PW=$PW -e SLEEP=$SLEEP -e TASKS=$TASKS
+echo Composition Parameters: $@
+$USER=$1
+PW=$2
+SLEEP=$3
+shift
+shift
+shift
+TASKS=$@
+
+echo TASKS=$TASKS
+
+
 echo "" > nohup.out
 
 sudo service docker start
@@ -19,24 +32,13 @@ echo "Composition start /selenium"
 sudo docker run -d --net=bridge --name selenium selenium/standalone-chrome:3.141.59
 
 
-#USER=$USER -e PW=$PW -e SLEEP=$SLEEP -e TASKS=$TASKS
-echo Composition Parameters: $@
-$USER=$1
-PW=$2
-SLEEP=$3
-shift
-shift
-shift
-TASKS=$@
-
-
 echo "Composition sudo docker stop /bot"
 sudo docker stop /bot
 echo "Composition sudo docker rm /bot"
 sudo docker rm /bot
 
 
-CMD="sudo docker run -d -v /home/ec2-user/uploads:/app/uploads --net=bridge --link selenium:selenium -e SELENIUM=selenium --name bot -e ENV=$SETTINGS -e USER=$USER -e PW=$PW -e SLEEP=$SLEEP -e TASKS=\"$TASKS\" gott50/saas-bot sh ./wait-for-selenium.sh http://selenium:4444/wd/hub -- python docker_quickstart.py"
+CMD="sudo docker run -d -v /home/ec2-user/uploads:/app/uploads --net=bridge --link selenium:selenium -e SELENIUM=selenium --name bot -e ENV=$SETTINGS -e USER=$USER -e PW=$PW -e SLEEP=$SLEEP -e TASKS=$TASKS gott50/saas-bot sh ./wait-for-selenium.sh http://selenium:4444/wd/hub -- python docker_quickstart.py"
 echo Composition CMD: $CMD
 $CMD
 
