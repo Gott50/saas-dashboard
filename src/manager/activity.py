@@ -42,7 +42,6 @@ class Activity:
 
     def cmd_start_bot(self, account, ip):
         self.logger.warning("run start_bot.sh on IP %s for User: %s" % (ip, account))
-        json_tasks = json.dumps(account['tasks'])
-        json_tasks.replace(" ", "")
+        json_tasks = json.dumps(account['tasks']).replace('"', '\\"').replace(" ", "")
         return subprocess.Popen(["./start_bot.sh", ip] +
                                 [account['username'], account['password'], str(account['sleep']), json_tasks])
